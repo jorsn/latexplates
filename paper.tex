@@ -1,0 +1,117 @@
+% name this file ms.tex in arXiv submission to ensure that arXiv uses this as main file
+\pdfoutput=1 % ensure that arXiv uses pdflatex
+
+% add shorthands to 'local-shorthands.tex'
+
+\makeatletter
+\providecommand*{\input@path}{}
+% extend the search path for tex files
+\g@addto@macro\input@path{{sty/}{sty/img/}{fig/}}
+\makeatother
+
+\RequirePackage[onecolumn]{IEEEtranSetup}
+\documentclass{IEEEtran}
+
+\usepackage{xparse}
+
+\ProvideIf[true]{ieee}  % if ieee submission (mainly disables hyperref)
+\ProvideIf[true]{ieeepreview}
+\ProvideIf[false]{blind} % if double-blind submission
+\ProvideIf[false]{arxiv} % if arXiv submission
+
+\ifieee % ieeeXplore doesn't accept hyperlinks
+  \usepackage[hyperref=false,bibtex]{boilerplate}
+\else
+  \ifarxiv
+    \usepackage[biblatex]{boilerplate}
+    \def\bibfont{\footnotesize{}\frenchspacing{}}
+  \else
+    \usepackage[bibtex]{boilerplate}
+  \fi
+\fi
+
+\usepackage[capitalize]{cleveref}
+\crefname{equation}{}{}
+\Crefname{equation}{Equation}{Equations}
+
+\IfFileExists{short.bib}{\addbibresource{short.bib}}{}
+\IfFileExists{bib.bib}{\addbibresource{bib.bib}}{}
+
+\title{%
+  New results on the speed of brown foxes
+}
+\date{\today}
+\author{
+  \IEEEauthorblockN{Hans~Wurst\IEEEauthorrefmark{1}, Bebraham~Hinterdupfinger\IEEEauthorrefmark{1}\IEEEauthorrefmark{2}}
+  \IEEEauthorblockA{
+    \IEEEauthorrefmark{1}
+    Technical University of Atlantis
+    \\
+    Email: \{\uref{mailto:wurst@tua.example.com}{wurst}%
+      , \uref{mailto:hinterdupfinger@tua.example.com}{hinterdupfinger}%
+    \}@tua.example.com
+  }
+  \IEEEauthorblockA{
+    \IEEEauthorrefmark{2}
+    National University of Antarctica
+  }
+}
+
+\makeatletter
+\hypersetup{
+  pdftitle = \string\@title,
+  pdfauthor = {Hans Wurst, Bebraham Hinterdupfinger},
+  pdfkeywords = {},
+  pdflang = {English},
+}
+\makeatother
+
+\IfFileExists{local-shorthands.tex}{\input{local-shorthands.tex}}{}
+
+\begin{document}
+
+\maketitle
+
+\begingroup
+\def\cmd#1{\texttt{\textbackslash{}#1}}
+\fxwarning{
+  The \textsf{fixme} package is loaded, so you can make editorial
+  notes with \texttt{\cmd{fxnote}[author=<author>]\\\{<margin comment>\}},
+  \texttt{\cmd{fxnote*}[author=<author>]\\\{<comment>\}\{<body text to highlight>\}},
+  or, for notes that have to be resolved before submission,
+  \cmd{fxfatal} and \cmd{fxfatal*} are used like \cmd{fxnote}.
+%
+  In the end of the document, there is also a list of corrections.
+%
+  The final submission should get the class option \texttt{final}. This
+  hides edit notes and the list of corrections,
+  and it produces a compile error for each remaining \cmd{fxfatal} calls.
+}
+\fxnote{
+  Please add shorthands to \texttt{local-shorthands.tex}.
+}
+\endgroup
+
+
+\section{Introduction}
+
+
+\section{Preliminaries}
+
+
+\section{Results}
+
+
+\section{Summary
+
+
+\section*{Acknowledgement}
+
+\printbibliography
+
+\newpage
+\listoffixmes
+
+\end{document}
+
+% vim: ts=2 sw=2

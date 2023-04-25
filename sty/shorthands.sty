@@ -1,0 +1,109 @@
+\NeedsTeXFormat{LaTeX2e}
+\RequirePackage{expl3}
+\ProvidesExplPackage{shorthands}{2023-01-25}{0.1}{my default shorthands}
+
+\ProcessOptions\relax
+
+\RequirePackage{xparse}
+\RequirePackage{amsmath,mathtools,amssymb,mathrsfs,bm,mleftright}
+
+% Here, we define groups that are expanded like
+%   \ceil{abc} -> \left\lceil abc\right\rceil
+%   \ceil[\big]{abc} -> \big\lceil abc\big\rceil
+\DeclareDocumentCommand {\DeclareGroup} {mmm} {
+  \DeclareDocumentCommand {#1} {som} {
+    \IfBooleanTF {##1}
+      { \IfValueTF{##2}{##2#2##3##2#3}{\left#2##3\right#3} }
+      { \IfValueTF{##2}
+          {\use:c { \cs_to_str:N ##2 l } #2##3 \use:c { \cs_to_str:N ##2 r } #3}
+          {\mleft#2##3\mright#3}
+      }
+  }
+}
+\DeclareGroup{\ceil} \lceil \rceil
+\DeclareGroup{\floor} \lfloor \rfloor
+\DeclareGroup{\brack}{[}{]}
+  \let\intv\brack
+\DeclareGroup{\paren}()
+  \let\tup\paren
+\DeclareGroup{\chevr} \langle \rangle
+\DeclareGroup{\braces}\{\}
+  \let\set\braces
+\DeclareGroup{\verts} \lvert \lvert
+  \let\abs\verts
+  \let\card\abs % cardinality
+\DeclareGroup{\norm}\|\|
+
+
+% Additional math operators
+
+\DeclareMathOperator{\conv}{conv} % convex hull
+\DeclareMathOperator{\closure}{cl}
+\DeclareMathOperator{\interior}{int}
+
+\DeclareMathOperator{\supp}{supp} % support
+\DeclareMathOperator{\Unif}{Unif} % uniform distribution
+
+\DeclareMathOperator*{\argmax}{arg{\:}max}
+\DeclareMathOperator*{\argmin}{arg{\:}min}
+
+\let\transp\intercal % matrix transposition
+\DeclareMathOperator{\trace}{tr}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\dimension}{dim}
+
+
+% We set abbreviations for maths characters in different fonts,
+% e.g. \rA...\rZ for \mathrm{A}...\mathrm{Z},
+% \rra...\rrz for \mathrm{a}...\mathrm{z}, etc.
+% For lowercase letters we use double letters to avoid
+% name clashes, since, e.g., \rm is already defined
+
+% We start with macros for setting a single letter,
+% and later apply them to every alphabet letter.
+
+% lowercase
+\cs_new:Npn \set_lower_fonts:n #1 % #1 is one letter
+{%
+  \cs_new:cpn { rr#1 }   {\mathrm{#1}}
+  \cs_new:cpn { tt#1 }   {\tilde{#1}}
+  \expandafter\DeclareBoldMathCommand\csname bb#1\endcsname{#1}
+  \expandafter\DeclareBoldMathCommand\csname bt#1\endcsname{\csname tt#1\endcsname}
+}
+
+% uppercase
+\cs_new:Npn \set_upper_fonts:n #1 % #1 is one letter
+{%
+  \cs_new:cpn { r#1 }   {\mathrm{#1}}
+  \cs_new:cpn { t#1 }   {\tilde{#1}}
+  \expandafter\DeclareBoldMathCommand\csname b#1\endcsname{#1}
+  \expandafter\DeclareBoldMathCommand\csname bt#1\endcsname{\csname t#1\endcsname}
+
+  \cs_new:cpn { c#1 }   {\mathcal{#1}}
+  \cs_new:cpn { scr#1 } {\mathscr{#1}}
+  \cs_new:cpn { tc#1 }  {\mathcal{\csname t#1\endcsname}} % latex3 idiomatic would be \mathcal{\use:c { t#1 }}
+
+  \expandafter\DeclareBoldMathCommand\csname bc#1\endcsname{\csname c#1\endcsname}
+  \expandafter\DeclareBoldMathCommand\csname btc#1\endcsname{\csname tc#1\endcsname}
+}
+
+% Now, we apply the macros to every letter in the alphabet
+\int_step_inline:nn {\int_from_alph:n {z}} { \set_lower_fonts:n {\int_to_alph:n {#1}} }
+\int_step_inline:nn {\int_from_alph:n {Z}} { \set_upper_fonts:n {\int_to_Alph:n {#1}} }
+
+
+% define special blackboard characters
+\clist_map_inline:nn {B,C,E,F,N,P,Q,R,Z,V}
+{
+  \cs_new:cpn { #1#1 } { \mathbb{#1} }
+}
+
+\let\expect\EE % expectation
+\DeclareDocumentCommand{\One}{}{\mathbbold{1}}
+
+\NewDocumentCommand{\ind}{om}{%
+  \One%
+  \IfValueTF{#1}{\tup[#1]{#2}}{\hspace{-2pt}\set{#2}}%
+}
+
+% vim: ts=2 sw=2

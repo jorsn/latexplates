@@ -1,0 +1,119 @@
+% create footnotes with identities:
+% \ifootdef   <label> <text>  defines a new footnote with a label
+% \ifoottext  <label>         expands to the footnote text for footnote <label>
+% \ifootprint <label>         prints the footnote text for footnote <label>
+% \ifootmark  <label>         prints the footnote mark for footnote <label>
+% \ifootnote  <label> <text>  defines a new footnote and immediately prints the footnote mark and text
+\NeedsTeXFormat{LaTeX2e}
+\RequirePackage{expl3}
+\ProvidesExplPackage{ifoot}{2022-04-06}{0.1}{footnotes with identities (labels)}
+
+\RequirePackage{xparse}
+\RequirePackage{etoolbox}
+\RequirePackage{refcount}
+
+
+%%% Motto: Every sufficiently large function looks like lisp.  
+
+
+%%% patches to LaTeX2e kernel 
+
+% footnotes must use refstepcounter so that \label has the right context
+\patchcmd{\footnotemark}{\stepcounter{footnote}}{\refstepcounter{footnote}}{}{}
+\patchcmd{\footnote}{\stepcounter}{\refstepcounter}{}{}
+
+
+%%% internal commands
+
+% template for commands including footnote marks
+%   #1: footnote command, e.g. '\footnotemark'
+%   #2: footnote label defined with \ifootdef
+%   #3: argument for footnote command
+\cs_new:Nn \__ifoot_mark:Nnn
+  { \exp_args:NNf \use:nnn
+      #1
+      { \cs_if_exist:cTF { ifoot_#2_marked }
+          { [\getrefnumber{#2}] }
+          { \label{#2}
+            \cs_new:cpn { ifoot_#2_marked } {}
+          }
+      }
+      { #3 }
+  }
+
+% template for commands including footnote marks
+%   #1: footnote command, e.g. '\footnotemark'
+%   #2: handler, turning a label into a '\footnote' arg
+%   #3: separator (e.g. \textsuperscript{,})
+%   #4: comma-separated list of footnote labels defined with \ifootdef
+\cs_new:Nn \__ifoot_marks:NNnn
+  { \clist_clear_new:N \l_tmpa_clist
+    \clist_map_inline:nn
+      { #4 }
+      { \clist_put_right:Nn \l_tmpa_clist
+          { \__ifoot_mark:Nnn #1 { ##1 } { #2 { ##1 } }
+          }
+      }
+    %\clist_show:N \l_tmpa_clist
+    \clist_use:Nn \l_tmpa_clist { #3 }
+    \clist_clear:N \l_tmpa_clist
+  }
+
+% drop argument #1
+\cs_new:Nn \__ifoot_drop:n {}
+
+%%% user commands
+
+% define new footnote
+%   #1: label (not displayed, only for referencing)
+%   #2: text
+\NewDocumentCommand {\ifootdef} {mm}
+  { \cs_gset:cpn { ifoot_#1 } { #2 } }
+
+\NewDocumentCommand {\ifoottext} {m}
+  { \use:c { ifoot_#1 } }
+
+% create footnotemark
+%   #1: comma-separated list of footnote labels defined with \ifootdef
+\NewDocumentCommand {\ifootmark} {m}
+  { \__ifoot_marks:NNnn
+      \footnotemark
+      \__ifoot_drop:n
+      { \textsuperscript{,} }
+      { #1 }
+  }
+  
+% print footnote (like \footnotetext, but uses predefined text)
+%   #1: comma-separated list of footnote labels defined with \ifootdef
+\NewDocumentCommand {\ifootprint} {m}
+  { \clist_map_inline:nn { #1 }
+      { \footnotetext [\getrefnumber{##1}] {\ifoottext{##1}} }
+  }
+
+% create footnote
+%   #1: comma-separated list of footnote labels defined with \ifootdef
+%   #2 []: footnote text. If set, this defines the first footnote in the list.  (currently not handled)
+\NewDocumentCommand {\ifootnote} {mo}
+  { \clist_set:Nn \l_tmpa_clist { #1 }
+    \IfValueT {#2}
+      { \clist_get:NN \l_tmpa_clist \l_tmpa_tl
+        \ifootdef \l_tmpa_tl { #2 }
+      }
+    %\__ifoot_marks:NNnn
+    %  \footnote
+    %  \ifoottext
+    %  { \textsuperscript{,} }
+    %  { #1 }
+    %
+    % try for only one ref:
+    %\__ifoot_mark:Nnn \footnote { #1 } {} %\__ifoot_drop:n { #1 } }
+
+
+    % \footnotemark+\footnotetext is not semantically the same as \footnote
+    % However, the above commented out code somehow doesn't work.
+    \ifootmark{#1}\ifootprint{#1}  
+  }
+
+\endinput
+
+% vim: ft=tex sw=2 ts=2

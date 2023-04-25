@@ -1,0 +1,207 @@
+\NeedsTeXFormat{LaTeX2e}
+\RequirePackage{expl3,l3keys2e} % key-value options
+\ProvidesExplPackage{boilerplate}{2023-01-25}{0.1}{my default boilerplate}
+
+\bool_new:N \l_boilerplate_final
+\tl_new:N \l_boilerplate_bibEngine
+
+% options toggle features
+\keys_define:nn { boilerplate } {
+  % compress arrays
+  compress    .bool_set:N  =  \l_boilerplate_compress,
+  compress    .initial:n   =  false,
+  % use packages
+  hyperref    .bool_set:N  =  \l_boilerplate_hyperref,
+  hyperref    .initial:n   =  true,
+  thms        .bool_set:N  =  \l_boilerplate_thms,
+  thms        .initial:n   =  true,
+  shorthands  .bool_set:N  =  \l_boilerplate_shorthands,
+  shorthands  .initial:n   =  true,
+  % final mode, draft mode or none
+  final       .bool_set:N = \l_boilerplate_final,
+  draft       .bool_set:N = \l_boilerplate_draft,
+  % bibliography: use bibtex, biblatex, or none
+  % e.g. biblatex={a,b,c} to use biblatex with package options {a,b,c}
+  bib                   .choice:,
+  %bib / unknown         .tl_set:N   = \l_boilerplate_bibEngine,
+  bib / bibtex          .code:n     =  {
+    \tl_set:Nn \l_boilerplate_bibEngine { bibtex }
+    \keys_set:nn { boilerplate / bib / bibtex } { #1 }
+  },
+  bib / bibtex          .default:n  =  { style=IEEEtran },
+  bib / bibtex / style  .tl_set:N   =  \l_boilerplate_bibStyle,
+  bib / biblatex        .code:n     =  {
+    \tl_set:Nn \l_boilerplate_bibEngine { biblatex }
+  },
+  bib / biblatex / unknown  .code:n     =
+    { \PassOptionsToPackage{\l_keys_key_str=#1}{biblatex} },
+  bib / biblatex        .default:n = { style=ieee, backend=biber },
+  bib                   .meta:nn = { boilerplate / bib } { #1 },
+  bib                   .default:n  =  bibtex,
+  bib                   .initial:n = bibtex,
+  %% shorthands
+  bibtex     .code:n = {
+    \keys_set:nn { boilerplate / bib }           { bibtex }
+    \keys_set:nn { boilerplate / bib / bibtex }  { #1 }
+  },
+  biblatex     .code:n = {
+    \keys_set:nn { boilerplate / bib }             { biblatex }
+    \keys_set:nn { boilerplate / bib / biblatex }  { style=ieee, backend=biber }
+    \keys_set:nn { boilerplate / bib / biblatex }  { #1 }
+  },
+}
+
+\ProcessKeysOptions{ boilerplate }
+
+\if_bool:N \l_boilerplate_final
+\if_bool:N \l_boilerplate_draft
+  \ClassError{boilerplate}{Options~'final'~and~'draft'~are~mutually~exclusive}
+\fi:\fi:
+
+\RequirePackage{xparse} % provides \(New|Provide|Declare)DocumentCommand
+
+\NewDocumentCommand \ProvideIf { O{false} m } {
+  \cs_if_exist:cTF { if #2 } {} {
+    \exp_last_unbraced:Nx \newif { \use:c { if #2 } }
+    \use:c { #2 #1 }
+  }
+}
+
+\RequirePackage{ifoverleaf}
+
+\if_bool:N \l_boilerplate_hyperref % ieee doesn't allow hyperlinks nor bookmarks
+  \RequirePackage{hyperref}
+  \IfFileExists{orcidlink.sty}{\RequirePackage{orcidlink}}{}
+  \hypersetup{unicode, pdfduplex=DuplexFlipLongEdge}
+\fi:
+\RequirePackage{uri}
+
+% default dummy commands
+\ProvideDocumentCommand{\hypersetup}{m}{}
+\ProvideDocumentCommand{\orcidlink}{m}{}
+\ProvideDocumentCommand{\texorpdfstring}{ m m }{#1}
+\ProvideDocumentCommand{\pdfmath}{m}{\texorpdfstring{$#1$}{#1}}
+
+% uref is like href but defaults to #2 if hyperref is not loaded
+\DeclareDocumentCommand{\tumail}{m}{\uref{mailto:#1@tum.de}{#1}}
+
+\RequirePackage{graphicx,grffile}
+
+% math
+\RequirePackage{amsmath,mathtools}
+\RequirePackage{amssymb,amsxtra} % math symbols
+
+% typography
+%% compatibility with pdfTeX, LuaTeX and XeTeX (modern TeX engines)
+\RequirePackage{iftex}
+%\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+\ifpdftex
+  \RequirePackage{cmap}        % make pdftex-generated document searchable (bugfix)
+  \RequirePackage[utf8]{inputenc}
+  \RequirePackage[T1]{fontenc} % support T1 postscript fonts
+  \RequirePackage{textcomp}    % provide euro and other symbols
+\else
+  \RequirePackage{fontspec} % handle system fonts
+  \ifluatex
+    \RequirePackage{selnolig}      % disable illegal ligatures
+    \RequirePackage{lualatex-math} % e.g. luatex + amsmath/mathtools compatibility
+  \fi
+\fi
+\DeclareSymbolFont{bbold}{U}{bbold}{m}{n} % blackboard fonts for all characters, e.g. \mathbbold{1}
+\DeclareSymbolFontAlphabet{\mathbbold}{bbold}
+% add \mathscr script font (!= \mathcal)
+\RequirePackage{mathrsfs}
+
+\RequirePackage[english]{babel}
+\RequirePackage{csquotes}
+
+\RequirePackage[babel]{microtype} % TeX's microtypographic features
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+
+\RequirePackage{booktabs}
+\RequirePackage{array}
+
+% Bibliography
+\tl_if_eq:NnTF \l_boilerplate_bibEngine { bibtex }
+{
+  \ClassInfo{boilerplate}{Using~BibTeX}
+  \ClassInfo{boilerplate}{%
+    Defining~simple~replacements~for~%
+    \noexpand\addbibresource~and~\noexpand\printbibliography%
+  }
+  \clist_new:N \l_boilerplate_bibresources
+  \NewDocumentCommand{\addbibresource}{om}{
+    \IfValueT{#1}{
+      \ClassWarning{boilerplate}{\noexpand\addbibresource:~ignore BibLaTeX options}
+    }
+    \tl_set:Nn \l_tmpa_tl { #2 }
+    \tl_reverse:N \l_tmpa_tl % remove suffix .bib
+    \tl_remove_once:Nn \l_tmpa_tl { bib. }
+    \tl_reverse:N \l_tmpa_tl
+    \clist_put_right:Nx \l_boilerplate_bibresources \l_tmpa_tl
+  }
+  \NewDocumentCommand{\printbibliography}{o}{
+    \IfValueT{#1}{
+      \ClassWarning{boilerplate}{\noexpand\printbibliography:~ignore BibLaTeX options}
+    }
+    \bibliography{\l_boilerplate_bibresources}
+  }
+  \tl_if_eq:NnTF \l_boilerplate_bibStyle { ieee } {
+    \bibliographystyle{IEEEtran}
+  }{
+    \bibliographystyle{\l_boilerplate_bibStyle}
+  }
+  \RequirePackage{cite}
+}{
+\tl_if_eq:NnTF \l_boilerplate_bibEngine { biblatex }
+{
+  \ClassInfo{boilerplate}{Using~BibLaTeX}
+  \RequirePackage{biblatex}
+  \ExecuteBibliographyOptions{url=false}
+  \ExecuteBibliographyOptions[book]{url=true}
+}{}}
+\addbibresource[bibencoding=latin1]{IEEEabrv.bib}
+
+% editing
+%\usepackage[obeyFinal]{todonotes}
+%\usepackage{color-edits}
+%\if_bool:N \l_boilerplate_final
+%  \setreviewsoff
+%\else:
+%  \setreviewson
+%\fi:
+%\RequirePackage{xkvltxp}
+\if_bool:N \l_boilerplate_final
+  \RequirePackage[final]{fixme}
+\else:
+  \RequirePackage[draft]{fixme}
+  \fxusetheme{color}
+\fi:
+
+
+% tweaks
+\RequirePackage{balance}
+\DeclareDocumentCommand{\tab}{}{&} % to be able to use tabs conditionally
+
+\if_bool:N \l_boilerplate_compress
+  \arraycolsep=0.5ex % compress rate regions
+\fi:
+
+
+% own local packages
+\if_bool:N \l_boilerplate_thms
+  \RequirePackage{thms}
+\fi:
+\if_bool:N \l_boilerplate_shorthands
+  \RequirePackage{shorthands}
+\fi:
+
+% documentclass specific defaults
+\@ifclassloaded{IEEEtran}{%
+  %\renewcommand{\bibfont}{\normalfont\footnotesize}
+  \renewcommand{\qedsymbol}{\ensuremath{\blacksquare}}
+}{%
+  \usepackage{IEEEtrantools}
+}
+
+% vim: ts=2 sw=2

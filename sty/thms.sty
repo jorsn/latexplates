@@ -1,0 +1,50 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{thms}[2023/01/25 my default theorems]
+
+\RequirePackage{amsthm,thmtools}
+
+% declare theorems only if not already defined
+\DeclareRobustCommand{\declarefallbackthm}[2][]{%
+  \ifcsname #2\endcsname\else\declaretheorem[#1]{#2}\fi
+}
+
+% subthms counters (work only for theorems defined with thmtools)
+% use inside theorem env like
+% \begin{theorem}
+%   \label{thm:abc}
+%   \begin{subthms}
+%     \subthm \label{thm:abcA} ...
+%     \subthm \label{thm:abcB} ...
+%   \end{subthms}
+% \end{theorem}
+
+% Usage: \begin{subthms} \subthm <text> \subthm <text> \end{subthms}
+\let\subthms\enumerate
+\let\endsubthms\endenumerate
+\def\subthm{%
+  \expandafter\refstepcounter{subthm_\thmt@envname}%
+  \item[\expandafter\alph{subthm_\thmt@envname})]%
+}
+
+\DeclareRobustCommand{\declaresubthm}[1]{%
+  \newcounter{subthm_#1}[#1]
+  \expandafter\renewcommand\csname thesubthm_#1\endcsname%
+    {\csname the#1\endcsname\alph{subthm_#1}}
+}
+
+\declarefallbackthm[style=definition]{definition}
+\declaresubthm{definition}
+\declarefallbackthm[style=remark]{remark}
+\declaresubthm{remark}
+
+\RequirePackage{expl3}
+
+\ExplSyntaxOn
+\clist_map_inline:nn { proposition, theorem, lemma, corollary, claim, conjecture, problem, example }
+{
+  \declarefallbackthm{#1}
+  \declaresubthm{#1}
+}
+\ExplSyntaxOff
+
+\endinput

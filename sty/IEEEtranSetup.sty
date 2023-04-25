@@ -1,0 +1,38 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{IEEEtranSetup}[2022-08-22 v0.1.0 IEEEtran quick setup options]
+
+\newif\ifonecol
+\newif\iftwocol
+
+\twocolfalse
+
+
+\DeclareOption{onecolumn}{
+  \onecoltrue\twocolfalse
+}
+\DeclareOption{twocolumn}{
+  \onecolfalse\twocoltrue
+}
+
+\ProcessOptions\relax
+
+\ifonecol
+  \PassOptionsToClass{onecolumn}{IEEEtran}
+  % IEEEtran onecolumn width is ugly and unergonomic
+  \providecommand{\CLASSINPUTtoptextmargin}{3cm}
+  \providecommand{\CLASSINPUTbottomtextmargin}{3cm}
+  \providecommand{\CLASSINPUTinnersidemargin}{2cm}
+  \providecommand{\CLASSINPUToutersidemargin}{6cm}
+
+  \AtBeginDocument{
+    \ifcsname CLASSINPUToutersidemargin\endcsname
+      \marginparwidth = \dimexpr\CLASSINPUToutersidemargin - 1cm
+    \fi
+    \marginparpush = 1.5ex
+  }
+\else
+  \PassOptionsToClass{twocolumn}{IEEEtran}
+\fi
+
+\newcommand{\onecol}[1]{\ifonecol#1\fi}
+\newcommand{\twocol}[1]{\iftwocol#1\fi}

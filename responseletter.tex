@@ -1,0 +1,100 @@
+\makeatletter
+\providecommand*{\input@path}{}
+% extend the search path for tex files
+\g@addto@macro\input@path{{sty/}{sty/img/}{fig/}}
+\makeatother
+
+\documentclass{responseletter}
+
+\usepackage[biblatex]{boilerplate}
+
+\ifpdftex
+  %\usepackage{mlmodern} % less ultra-light, but too heavy computer modern
+                         % better use lualatex and book wight CM by fontsetup
+\else
+  \ifnum 1=\ifluatex 1\else\ifxetex 1\else 0\fi\fi
+    \usepackage{fontsetup} % book weight computer modern font
+  \fi
+\fi
+  
+% \addbibresource{short.bib} % additional self-defined shorthands
+% \addbibresource{bib.bib}   % your bibliography
+
+\date{September 9, 2022}
+
+\newcommand \theauthors {Hans~Wurst, Bebraham~Hinterdupfinger}
+
+\metatable{
+  Manuscript ID  & CZ-42-1234
+  \\
+  Title          & New results on the speed of brown foxes
+  \\
+  Authors:        & \theauthors
+  \\
+  Journal:        & IEEE Transactions on Chromatic Zoology
+  \\
+  Submitted Date: & 1 January 1970
+}
+
+\begin{document}
+
+\maketitle
+
+Dear Prof. Editor,
+
+We are grateful for the helpful comments and suggestions.
+We appreciate the time and effort that you and the reviewers
+dedicated to the detailed reading and review of our paper.
+
+Following the suggestions made by the reviewers,
+we modified and improved the presentation of the paper.
+In the following, we address all of the reviewers' comments
+and concerns point by point.
+
+The revised paper is attached.
+We also uploaded a version where all changes we made are highlighted.
+
+\section*{Associate Editor's Comments}
+
+\begin{comm*}
+  ...
+\end{comm*}
+
+\begin{ans}
+  ...
+\end{ans}
+
+
+\review
+
+\begin{comm}
+  Lorem ipsum!
+\end{comm}
+\begin{ans}
+  Dolor sit amet.
+\end{ans}
+
+
+\review
+
+\begin{comm}
+  The quick brown fox: Does he jump?
+\end{comm}
+
+\begin{ans}
+  Whe thank the reviewer for the feedback.
+  We added the following to Section 4.2:
+  \emph{“The quick brown fox jumps over the lazy dog.”}
+\end{ans}
+
+\vspace{2em}
+
+Best Regards, \\
+\theauthors
+
+%\clearpage
+%\printbibliography
+
+\end{document}
+
+% vim: ts=2 sw=2

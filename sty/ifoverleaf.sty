@@ -1,0 +1,19 @@
+\ProvidesPackage{ifoverleaf}
+% based on https://tex.stackexchange.com/a/650621
+
+\def\ifoverleaf@StripPrefix#1>{}
+\def\ifoverleaf@jobis#1{FF\fi
+    \def\ifoverleaf@predicate{#1}%
+    \edef\ifoverleaf@predicate{%
+      \expandafter\ifoverleaf@StripPrefix\meaning\ifoverleaf@predicate}%
+    \edef\ifoverleaf@job{\jobname}%
+    \ifx\ifoverleaf@job\ifoverleaf@predicate
+}
+
+\newif\ifoverleaf
+
+\if\ifoverleaf@jobis{output}
+  \overleaftrue
+\else
+  \overleaffalse
+\fi
