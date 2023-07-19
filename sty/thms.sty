@@ -19,12 +19,13 @@
 % \end{theorem}
 
 % Usage: \begin{subthms} \subthm <text> \subthm <text> \end{subthms}
-\let\subthms\enumerate
-\let\endsubthms\endenumerate
-\def\subthm{%
-  \expandafter\refstepcounter{subthm_\thmt@envname}%
-  \item[\expandafter\alph{subthm_\thmt@envname})]%
-}
+\newenvironment{subthms}{\list%
+  {\expandafter\refstepcounter{subthm_\thmt@envname}%
+    \expandafter\alph{subthm_\thmt@envname})}
+  {\leftmargin=1em}
+}{\endlist}
+\let\subthm\item
+
 
 \DeclareRobustCommand{\declaresubthm}[1]{%
   \newcounter{subthm_#1}[#1]
