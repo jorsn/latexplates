@@ -43,8 +43,12 @@
 \crefname{equation}{}{}
 \Crefname{equation}{Equation}{Equations}
 
-\IfFileExists{short.bib}{\addbibresource{short.bib}}{}
-\IfFileExists{bib.bib}{\addbibresource{bib.bib}}{}
+\IfFileExists{short.bib}{
+  \addbibresource{short.bib}
+}{}
+\IfFileExists{bib.bib}{
+  \addbibresource{bib.bib}
+}{}
 
 \title{%
   New results on the speed of brown foxes
@@ -75,7 +79,9 @@
 }
 \makeatother
 
-\IfFileExists{local-shorthands.tex}{\input{local-shorthands.tex}}{}
+\IfFileExists{local-shorthands.tex}{
+  \input{local-shorthands.tex}
+}{}
 
 \begin{document}
 
