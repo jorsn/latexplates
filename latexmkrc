@@ -7,20 +7,22 @@ ensure_path( 'OPENTYPEFONTS', 'fonts//');
 $lualatex_files = qr/.*poster.*\.tex/;
 
 $pdflatex_orig = $pdflatex;
-$pdflatex = 'internal compile';
+$pdflatex = 'internal compile %O %S';
 
 sub compile {
 
   if ($$Psource =~ $lualatex_files) {
     $pdf_mode = 4;
-    $cmd = $lualatex;
+    $cmd = "lualatex";
   } elsif ($$Psource =~ $xelatex_files) {
     $pdf_mode = 5;
-    $cmd = $xelatex;
+    $cmd = "xelatex";
   } else {
     $pdf_mode = 1;
-    $cmd = $pdflatex_orig;
+    $cmd = "pdflatex";
   }
 
-  return Run_subst( $cmd );
+  
+  return system $cmd, @_;
+  #return Run_subst( $cmd );
 }
