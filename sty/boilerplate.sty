@@ -67,7 +67,9 @@
   }
 }
 
-\RequirePackage{ifoverleaf}
+\IfFileExists{ifoverleaf.sty}{
+  \RequirePackage{ifoverleaf}
+}{}
 
 \if_bool:N \l_boilerplate_hyperref % ieee doesn't allow hyperlinks nor bookmarks
   \RequirePackage{hyperref}
