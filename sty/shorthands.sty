@@ -91,14 +91,15 @@
 \int_step_inline:nn {\int_from_alph:n {z}} { \set_lower_fonts:n {\int_to_alph:n {#1}} }
 \int_step_inline:nn {\int_from_alph:n {Z}} { \set_upper_fonts:n {\int_to_Alph:n {#1}} }
 
-
-% define special blackboard characters
-\clist_map_inline:nn {B,C,E,F,N,P,Q,R,Z,V}
-{
-  \cs_new:cpn { #1#1 } { \mathbb{#1} }
+\cs_new:Nn \set_bb:n {
+  \cs_new:cpn { bb #1 } { \mathbb{#1} }
 }
 
-\let\expect\EE % expectation
+% define special blackboard characters
+%\clist_map_inline:nn {B,C,E,F,N,P,Q,R,Z,V}
+\int_step_inline:nn {\int_from_alph:n {Z}} { \set_bb:n {\int_to_Alph:n {#1}} }
+
+\let\expect\bbE % expectation
 \DeclareDocumentCommand{\One}{}{\mathbbold{1}}
 
 \NewDocumentCommand{\ind}{om}{%
