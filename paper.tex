@@ -3,6 +3,8 @@
 
 % please add shorthands to 'local-shorthands.tex'
 
+\ProvideExpandableDocumentCommand{\class}{IEEEtran}
+
 \makeatletter
 \providecommand*{\input@path}{}
 % extend the search path for tex files
@@ -10,24 +12,31 @@
 \makeatother
 
 \RequirePackage[onecolumn]{IEEEtranSetup}
-\documentclass{IEEEtran}
+\documentclass \class
 
 \usepackage{xparse}
 
-\ProvideIf[true]{ieee}  % if ieee submission (mainly disables hyperref)
-\ProvideIf[true]{ieeepreview}
+\ProvideIf[false]{ieee}  % if ieee submission (mainly disables hyperref)
+\ProvideIf[false]{ieeepreview}
 \ProvideIf[false]{blind} % if double-blind submission
 \ProvideIf[false]{arxiv} % if arXiv submission
+
+\IfClassLoadedWithOptionsTF \class {final} {} {\overfullrule=2cm}
+\frenchspacing
 
 \ifieee % ieeeXplore doesn't accept hyperlinks
   \usepackage[hyperref=false,bibtex]{boilerplate}
 \else
   \ifarxiv
     \usepackage[biblatex]{boilerplate}
-    \def\bibfont{\footnotesize{}\frenchspacing{}}
+    \def\bibfont{\footnotesize\frenchspacing{}}
   \else
     \usepackage[bibtex]{boilerplate}
   \fi
+\fi
+
+\ifnum 1=\ifieeepreview 1\else\ifieee 1\else 0\fi\fi
+  \DeclareDocumentCommand{\orcidlink}{m}{}
 \fi
 
 \usepackage[capitalize]{cleveref}
