@@ -103,7 +103,7 @@
 
 \NewDocumentCommand{\ind}{om}{%
   \One%
-  \IfValueTF{#1}{\tup[#1]{#2}}{\hspace{-2pt}\set{#2}}%
+  \IfValueTF{#1}{\tup[#1]{#2}}{\tup{#2}}%
 }
 
 % vim: ts=2 sw=2
