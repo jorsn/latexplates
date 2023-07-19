@@ -1,6 +1,6 @@
 \NeedsTeXFormat{LaTeX2e}
-\RequirePackage{expl3,l3keys2e} % key-value options
-\ProvidesExplPackage{boilerplate}{2023-01-25}{0.1}{my default boilerplate}
+\RequirePackage{bootstrap}
+\ProvidesExplPackage{boilerplate}{2023-05-15}{0.2}{my default boilerplate}
 
 \bool_new:N \l_boilerplate_final
 \tl_new:N \l_boilerplate_bibEngine
@@ -57,15 +57,6 @@
 \if_bool:N \l_boilerplate_draft
   \ClassError{boilerplate}{Options~'final'~and~'draft'~are~mutually~exclusive}
 \fi:\fi:
-
-\RequirePackage{xparse} % provides \(New|Provide|Declare)DocumentCommand
-
-\NewDocumentCommand \ProvideIf { O{false} m } {
-  \cs_if_exist:cTF { if #2 } {} {
-    \exp_last_unbraced:Nx \newif { \use:c { if #2 } }
-    \use:c { #2 #1 }
-  }
-}
 
 \IfFileExists{ifoverleaf.sty}{
   \RequirePackage{ifoverleaf}

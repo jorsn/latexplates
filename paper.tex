@@ -5,11 +5,8 @@
 
 \ProvideExpandableDocumentCommand{\class}{IEEEtran}
 
-\makeatletter
-\providecommand*{\input@path}{}
-% extend the search path for tex files
-\g@addto@macro\input@path{{sty/}{sty/img/}{fig/}}
-\makeatother
+\RequirePackage{sty/bootstrap}
+\AppendInputPath{{sty/}{sty/img/}{fig/}{build/}}
 
 \RequirePackage[onecolumn]{IEEEtranSetup}
 \documentclass \class
