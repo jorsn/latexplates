@@ -1,6 +1,6 @@
 \NeedsTeXFormat{LaTeX2e}
 \RequirePackage{expl3,l3keys2e} % key-value options
-\ProvidesExplPackage{bootstrap}{2023-05-15}{0.1}{defintions for document bootstrapping}
+\ProvidesExplPackage{bootstrap}{2023-07-19}{0.2}{defintions for document bootstrapping}
 
 \RequirePackage{xparse} % provides \(New|Provide|Declare)DocumentCommand
 \NewDocumentCommand \ProvideIf { O{false} m } {
@@ -17,6 +17,13 @@
 }
 \NewDocumentCommand \AppendInputPath {m} {
   \g@addto@macro \input@path {#1}
+}
+
+\NewDocumentCommand \suppresspackage {m} {
+  \cs_gset:cpn { ver@#1.sty } { 9999/12/31 }
+}
+\NewDocumentCommand \unsuppresspackage {m} {
+  \cs_gset_eq:cN { ver@#1.sty } \relax
 }
 
 % for legacy TeXlive (2020 and before)
