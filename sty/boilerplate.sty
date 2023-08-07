@@ -139,10 +139,12 @@
     }
     \bibliography{\l_boilerplate_bibresources}
   }
-  \tl_if_eq:NnTF \l_boilerplate_bibStyle { ieee } {
-    \bibliographystyle{IEEEtran}
-  }{
-    \bibliographystyle{\l_boilerplate_bibStyle}
+  \tl_if_eq:NnTF \l_boilerplate_bibStyle { none } {} {
+    \tl_if_eq:NnTF \l_boilerplate_bibStyle { ieee } {
+      \bibliographystyle{IEEEtran}
+    }{
+      \bibliographystyle{\l_boilerplate_bibStyle}
+    }
   }
   \RequirePackage{cite}
 }{
