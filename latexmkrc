@@ -4,7 +4,7 @@ $pdf_mode = 1;       # use LuaLaTeX (1: pdfLaTeX, 4: LuaLaTeX, 5: XeLaTeX)
 ensure_path( 'TTFONTS',       'fonts//');
 ensure_path( 'OPENTYPEFONTS', 'fonts//');
 
-$lualatex_files = qr/.*poster.*\.tex/;
+$lualatex_files = qr/.*(poster|responseletter).*\.tex/;
 
 $pdflatex_orig = $pdflatex;
 $pdflatex = 'internal compile %O %S';
@@ -22,7 +22,7 @@ sub compile {
     $cmd = "pdflatex";
   }
 
-  
+
   return system $cmd, @_;
   #return Run_subst( $cmd );
 }
