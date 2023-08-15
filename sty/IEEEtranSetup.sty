@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{IEEEtranSetup}[2022-08-22 v0.1.0 IEEEtran quick setup options]
+\ProvidesPackage{IEEEtranSetup}[2023-08-15 v0.1.1 IEEEtran quick setup options]
 
 \newif\ifonecol
 \newif\iftwocol
@@ -34,5 +34,5 @@
   \PassOptionsToClass{twocolumn}{IEEEtran}
 \fi
 
-\newcommand{\onecol}[1]{\ifonecol#1\fi}
-\newcommand{\twocol}[1]{\iftwocol#1\fi}
+\NewExpandableDocumentCommand \onecol {+m} {\ifonecol#1\fi}
+\NewExpandableDocumentCommand \twocol {+m} {\iftwocol#1\fi}
