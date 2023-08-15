@@ -1,0 +1,70 @@
+\begingroup
+\def\cmd#1{\texttt{\textbackslash{}#1}}
+\begin{anfxwarning}[author=\noindent JR]{edit notes}
+  The \textsf{fixme} package is loaded, so
+  \begin{itemize}
+    \item you can make editorial notes with
+      \\
+        \texttt{\cmd{fxnote}[author=<author>]%
+      \twocol{\\\hbox{}\quad}%
+          \{<margin comment>\}},
+      \\
+        \texttt{\cmd{fxnote*}[author=<author>]%
+      \twocol{\\\hbox{}\quad}%
+          \{<comment>\}\{<text to highlight>\}},
+
+  \item
+    for notes that have to be resolved before submission,
+    \cmd{fxfatal} and \cmd{fxfatal*} are used like \cmd{fxnote},
+
+  \item
+    in the end of the document, there is also a \MakeLowercase\englishlistfixmename .
+
+  \item
+    The final submission should get the class option \texttt{final}. This hides
+    edit notes and the list of corrections, and it produces a compile error for
+    each remaining \cmd{fxfatal} calls.
+\end{itemize}
+\end{anfxwarning}
+\endgroup
+
+\begin{anfxnote}[author=\noindent JR]{Macro conventions}
+  \section*{Macro conventions}
+  \label{meta:macros}
+  \raggedright
+  Please do not use \verb|\mathbf|, which does not work for all (math) symbols,
+  but instead use the command \verb|\bm|, which is more flexible.
+  Mixing both leads to inconsistent output,
+  e.g. \verb|\mathbf{X, \alpha}| $\mapsto \mathbf{X, \alpha}$,
+  while \verb|\bm{X, \alpha}| $\mapsto \bm{X, \alpha}$.
+  The files \verb|sty/shorthands.sty| and \verb|local-shorthands.tex|
+  define many shorthands, e.g.
+
+  \begin{multicols} 2
+    \centering
+    \begin{tblr}{colspec={ll},verb}
+      \verb|\bX| & $\bX$ \\
+      \verb|\bbx| & $\bbx$ \\
+      \verb|\cX| & $\cX$ \\
+      \verb|\bcX| & $\bcX$ \\
+      \verb|\bbN| & $\bbN$ \\
+      \verb|\bbR| & $\bbR$ \\
+      \verb|\expect| & $\expect$ \\
+      \verb|\One| & $\One$ \\
+      \verb|\ind{a}| & $\ind{a}$ \\
+    \end{tblr}
+
+    \begin{tblr}{colspec={ll},verb}
+      \verb|\tup{a}| & $\tup{a}$ \\
+      \verb|\paren{a}| & $\paren{a}$ \\
+      \verb|\intv{a}| & $\intv{a}$ \\
+      \verb|\brack{a}| & $\brack{a}$ \\
+      \verb|\abs{a}| & $\abs{a}$ \\
+      \verb|\card{\cX_1}| & $\card{\cX_1}$ \\
+      \verb|\set{a}| & $\set{a}$ \\
+    \end{tblr}
+  \end{multicols}
+
+  \noindent
+  Please define your own shorthands in \verb|local-shorthands.tex|.
+\end{anfxnote}

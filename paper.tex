@@ -38,6 +38,9 @@
   \DeclareDocumentCommand{\orcidlink}{m}{}
 \fi
 
+\usepackage{multicol}
+\usepackage{tabularray}
+
 \usepackage[capitalize]{cleveref}
 \crefname{equation}{}{}
 \Crefname{equation}{Equation}{Equations}
@@ -86,58 +89,7 @@
 
 \maketitle
 
-\begingroup
-\def\cmd#1{\texttt{\textbackslash{}#1}}
-\begin{anfxwarning}[author=JR]{edit notes}
-  The \textsf{fixme} package is loaded, so you can make editorial
-  notes with \texttt{\cmd{fxnote}[author=<author>]\\\{<margin comment>\}},
-  \texttt{\cmd{fxnote*}[author=<author>]\\\{<comment>\}\{<body text to highlight>\}},
-  or, for notes that have to be resolved before submission,
-  \cmd{fxfatal} and \cmd{fxfatal*} are used like \cmd{fxnote}.
-
-  In the end of the document, there is also a list of corrections.
-
-  The final submission should get the class option \texttt{final}. This
-  hides edit notes and the list of corrections,
-  and it produces a compile error for each remaining \cmd{fxfatal} calls.
-\end{anfxwarning}
-\endgroup
-
-\begin{anfxnote}[author=JR]{Macro conventions}
-  \section*{Macro conventions}
-  \label{meta:macros}
-  \raggedright
-  Please do not use \verb|\mathbf|, which does not work for all (math) symbols,
-  but instead use the command \verb|\bm|, which is more flexible.
-  Mixing both leads to inconsistent output,
-  e.g. \verb|\mathbf{X, \alpha}| $\mapsto \mathbf{X, \alpha}$,
-  while \verb|\bm{X, \alpha}| $\mapsto \bm{X, \alpha}$.
-  The files \verb|sty/shorthands.sty| and \verb|local-shorthands.tex|
-  define many shorthands, e.g.
-
-  \begin{tabular}{ll}
-    \verb|\bX| & $\bX$ \\
-    \verb|\bbx| & $\bbx$ \\
-    \verb|\cX| & $\cX$ \\
-    \verb|\bcX| & $\bcX$ \\
-    \verb|\bbN| & $\bbN$ \\
-    \verb|\bbR| & $\bbR$ \\
-    \verb|\expect| & $\expect$ \\
-    \verb|\One| & $\One$ \\
-    \verb|\ind{a}| & $\ind{a}$ \\
-    \verb|\set{a}| & $\set{a}$ \\
-    \verb|\tup{a}| & $\tup{a}$ \\
-    \verb|\paren{a}| & $\paren{a}$ \\
-    \verb|\intv{a}| & $\intv{a}$ \\
-    \verb|\brack{a}| & $\brack{a}$ \\
-    \verb|\abs{a}| & $\abs{a}$ \\
-    \verb|\card{\cX_1}| & $\card{\cX_1}$ \\
-  \end{tabular}
-
-  \noindent
-  Please define your own shorthands in \verb|local-shorthands.tex|.
-\end{anfxnote}
-
+\input edit-notes
 
 \section{Introduction}
 
