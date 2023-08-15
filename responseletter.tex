@@ -1,8 +1,5 @@
-\makeatletter
-\providecommand*{\input@path}{}
-% extend the search path for tex files
-\g@addto@macro\input@path{{sty/}{sty/img/}{fig/}}
-\makeatother
+\RequirePackage{sty/bootstrap}
+\PrependInputPath{sty,sty/img,fig}
 
 \documentclass{responseletter}
 

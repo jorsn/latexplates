@@ -1,6 +1,6 @@
 \NeedsTeXFormat{LaTeX2e}
 \RequirePackage{expl3,l3keys2e} % key-value options
-\ProvidesExplPackage{bootstrap}{2023-07-19}{0.2}{defintions for document bootstrapping}
+\ProvidesExplPackage{bootstrap}{2023-08-15}{0.3}{defintions for document bootstrapping}
 
 \RequirePackage{xparse} % provides \(New|Provide|Declare)DocumentCommand
 \NewDocumentCommand \ProvideIf { O{false} m } {
@@ -10,13 +10,21 @@
   }
 }
 
-\ProvideDocumentCommand \input@path {} {}
+
 % extend the search path for tex files
-\NewDocumentCommand \DeclareInputPath {m} {
-  \RenewDocumentCommand \input@path {} {#1}
+
+\NewExpandableDocumentCommand \DeclareInputPath {m} {
+  \seq_set_from_clist:Nn \l_file_search_path_seq {#1}
 }
-\NewDocumentCommand \AppendInputPath {m} {
-  \g@addto@macro \input@path {#1}
+
+\NewExpandableDocumentCommand \PrependInputPath {m} {
+  \seq_set_from_clist:Nn \l_tmpa_seq { #1 }
+  \seq_concat:NNN \l_file_search_path_seq \l_tmpa_seq \l_file_search_path_seq
+}
+
+\NewExpandableDocumentCommand \AppendInputPath {m} {
+  \seq_set_from_clist:Nn \l_tmpa_seq { #1 }
+  \seq_concat:NNN \l_file_search_path_seq \l_file_search_path_seq \l_tmpa_seq
 }
 
 \NewDocumentCommand \suppresspackage {m} {
@@ -29,3 +37,5 @@
 % for legacy TeXlive (2020 and before)
 \let\IfPackageLoadedWithOptionsTF\@ifpackagewith
 \let\IfClassLoadedWithOptionsTF\@ifclasswith
+
+% vim: ts=2 sw=2
