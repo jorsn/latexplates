@@ -29,7 +29,7 @@
 \DeclareGroup{\chevr} \langle \rangle
 \DeclareGroup{\braces}\{\}
   \let\set\braces
-\DeclareGroup{\verts} \lvert \lvert
+\DeclareGroup{\verts} \lvert \rvert
   \let\abs\verts
   \let\card\abs % cardinality
 \DeclareGroup{\norm}\|\|
@@ -102,9 +102,6 @@
 \let\expect\bbE % expectation
 \DeclareDocumentCommand{\One}{}{\mathbbold{1}}
 
-\NewDocumentCommand{\ind}{om}{%
-  \One%
-  \IfValueTF{#1}{\tup[#1]{#2}}{\tup{#2}}%
-}
+\NewExpandableDocumentCommand{\ind}{}{ \One\tup }
 
 % vim: ts=2 sw=2
