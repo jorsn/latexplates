@@ -55,12 +55,15 @@
 
 \DeclareGroup{\bra}\langle |
 \DeclareGroup{\ket}| \rangle
+
 \NewExpandableDocumentCommand \PassStar {mm} {
-  \use:e { #1 \IfBooleanT{#2}{*} }
+  \ifx #1\BooleanTrue \expandafter{#1*}\else \expandafter#1\fi
 }
 \NewExpandableDocumentCommand \SepGroup {mm somm} {
   \PassStar {#1} {#3} [#4] { #5 } [ #2 #6 ]
 }
+\NewExpandableDocumentCommand \pureProj {som} {\PassStar\ketbra{#1}[#2]{#3}{#3}}
+
 \NewExpandableDocumentCommand \braket {} { \SepGroup \chevr \rvert }
 \NewExpandableDocumentCommand \ketbra {somm} {
   \PassStar \ket {#1} [#2] {#3}
@@ -136,5 +139,7 @@
 \DeclareDocumentCommand{\One}{}{\mathbbold{1}}
 
 \NewExpandableDocumentCommand{\ind}{}{ \One\tup }
+\let\idOp\One
+
 
 % vim: ts=2 sw=2
