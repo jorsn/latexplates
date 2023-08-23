@@ -19,6 +19,7 @@
 \ProvideIf[false]{ieeepreview}
 \ProvideIf[false]{blind} % if double-blind submission
 \ProvideIf[false]{arxiv} % if arXiv submission
+\ProvideIf[false]{compress} % if as much as possible should be compressed
 
 \IfClassLoadedWithOptionsTF \class {final} {} {\overfullrule=2cm}
 \frenchspacing
@@ -87,6 +88,25 @@
 \IfFileExists{local-shorthands.tex}{
   \input{local-shorthands.tex}
 }{}
+
+\usepackage{simpleacros}
+\ifcompress
+  \acsetup{
+    first-style = long-short,
+    subsequent-style = short,
+  }
+\else
+  \acsetup{
+    first-style = long,
+    subsequent-style = long,
+  }
+\fi
+
+\SimpleAcros{
+  id = identification,
+  bc = broadcast channel,
+}
+
 
 \begin{document}
 
