@@ -10,14 +10,33 @@
 % Here, we define groups that are expanded like
 %   \ceil{abc} -> \left\lceil abc\right\rceil
 %   \ceil[\big]{abc} -> \big\lceil abc\big\rceil
-\DeclareDocumentCommand {\DeclareGroup} {mmm} {
-  \DeclareDocumentCommand {#1} {som} {
-    \IfBooleanTF {##1}
-      { \IfValueTF{##2}{##2#2##3##2#3}{\left#2##3\right#3} }
-      { \IfValueTF{##2}
-          {\use:c { \cs_to_str:N ##2 l } #2##3 \use:c { \cs_to_str:N ##2 r } #3}
-          {\mleft#2##3\mright#3}
+\NewDocumentCommand {\DeclareGroup} {mmm} {
+  \DeclareDocumentCommand {#1} {somo} {
+    \IfValueTF {##2} {
+      \cs_set:Npn \gmid {\use:c{\cs_to_str:N ##2 m}}
+    }{
+      \let\gmid\middle
+    }
+    {
+    \IfValueTF {##2} {
+      \IfBooleanTF {##1} {
+        \let\gleft##2
+        \let\gright##2
+      }{
+        \cs_set:Npn \gleft  { \use:c { \cs_to_str:N ##2 l } }
+        \cs_set:Npn \gright { \use:c { \cs_to_str:N ##2 r } }
       }
+    }{
+      \IfBooleanTF {##1} {
+        \let\gleft\left
+        \let\gright\right
+      }{
+        \let\gleft\mleft
+        \let\gright\mright
+      }
+    }
+    \gleft#2##3 \IfValueT{##4}{\gmid##4} \gright#3
+    }
   }
 }
 \DeclareGroup{\ceil} \lceil \rceil
@@ -34,6 +53,20 @@
   \let\card\abs % cardinality
 \DeclareGroup{\norm}\|\|
 
+\DeclareGroup{\bra}\langle |
+\DeclareGroup{\ket}| \rangle
+\NewExpandableDocumentCommand \PassStar {mm} {
+  \use:e { #1 \IfBooleanT{#2}{*} }
+}
+\NewExpandableDocumentCommand \SepGroup {mm somm} {
+  \PassStar {#1} {#3} [#4] { #5 } [ #2 #6 ]
+}
+\NewExpandableDocumentCommand \braket {} { \SepGroup \chevr \rvert }
+\NewExpandableDocumentCommand \ketbra {somm} {
+  \PassStar \ket {#1} [#2] {#3}
+  \kern -.25em
+  \PassStar \bra {#1} [#2] {#4}
+}
 
 % Additional math operators
 
