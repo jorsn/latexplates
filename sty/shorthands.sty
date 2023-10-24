@@ -57,7 +57,7 @@
 \DeclareGroup{\ket}| \rangle
 
 \NewExpandableDocumentCommand \PassStar {mm} {
-  \ifx #1\BooleanTrue \expandafter{#1*}\else \expandafter#1\fi
+  \ifx #2\BooleanTrue\expandafter{#1*}\else\expandafter#1\fi
 }
 \NewExpandableDocumentCommand \SepGroup {mm somm} {
   \PassStar {#1} {#3} [#4] { #5 } [ #2 #6 ]
