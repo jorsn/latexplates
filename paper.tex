@@ -5,13 +5,11 @@
 
 \RequirePackage{snapshot} % create list of dependencies for submissions
 
-\ProvideExpandableDocumentCommand \class {} {IEEEtran}
-
 \RequirePackage{sty/bootstrap}
 \PrependInputPath{sty,sty/img,fig}
 
-\RequirePackage[onecolumn]{IEEEtranSetup}
-\documentclass \class
+\ProvideExpandableDocumentCommand \class {} {IEEEtranPlus}
+\documentclass [onecolumn] \class
 
 \usepackage{xparse}
 

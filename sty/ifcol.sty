@@ -1,0 +1,19 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{ifcol}[2024-01-23 v0.0.0 conditionals for one/twocolumn layout]
+
+\newif\ifonecol
+\newif\iftwocol
+
+\twocolfalse
+
+\DeclareOption{onecolumn}{
+  \onecoltrue\twocolfalse
+}
+\DeclareOption{twocolumn}{
+  \onecolfalse\twocoltrue
+}
+
+\ProcessOptions\relax
+
+\NewExpandableDocumentCommand \onecol {+m} {\ifonecol#1\fi}
+\NewExpandableDocumentCommand \twocol {+m} {\iftwocol#1\fi}
