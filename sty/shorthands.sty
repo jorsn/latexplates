@@ -10,33 +10,40 @@
 % Here, we define groups that are expanded like
 %   \ceil{abc} -> \left\lceil abc\right\rceil
 %   \ceil[\big]{abc} -> \big\lceil abc\big\rceil
+\seq_new:N \group_stack_mid
+\seq_new:N \group_stack_right
+
 \NewDocumentCommand {\DeclareGroup} {mmm} {
   \DeclareDocumentCommand {#1} {somo} {
     \IfValueTF {##2} {
-      \cs_set:Npn \gmid {\use:c{\cs_to_str:N ##2 m}}
+      %\cs_set:Npn \gmid {\use:c{\cs_to_str:N ##2 m}}
+      \seq_gpush:Nx \group_stack_mid {\cs_to_str:N ##2 m}
     }{
-      \let\gmid\middle
+      \seq_gpush:Nn \group_stack_mid {middle}
     }
-    {
     \IfValueTF {##2} {
       \IfBooleanTF {##1} {
-        \let\gleft##2
-        \let\gright##2
+        \let \gleft ##2
+        \seq_gpush:Nx \group_stack_right {\cs_to_str:N ##2}
       }{
-        \cs_set:Npn \gleft  { \use:c { \cs_to_str:N ##2 l } }
-        \cs_set:Npn \gright { \use:c { \cs_to_str:N ##2 r } }
+        \cs_set_eq:Nc \gleft  {\cs_to_str:N ##2 l}
+        \seq_gpush:Nx \group_stack_right {\cs_to_str:N ##2 r}
       }
     }{
       \IfBooleanTF {##1} {
-        \let\gleft\left
-        \let\gright\right
+        \let \gleft \left
+        \seq_gpush:Nn \group_stack_right {right}
       }{
-        \let\gleft\mleft
-        \let\gright\mright
+        \let \gleft \mleft
+        \seq_gpush:Nn \group_stack_right {mright}
       }
     }
-    \gleft#2##3 \IfValueT{##4}{\gmid##4} \gright#3
-    }
+    \gleft #2
+    ##3
+    \seq_gpop:NN \group_stack_mid \l_tmpa_seq
+    \IfValueT{##4}{\use:c \l_tmpa_seq ##4}
+    \seq_gpop:NN \group_stack_right \l_tmpa_seq
+    \use:c \l_tmpa_seq #3
   }
 }
 \DeclareGroup{\ceil} \lceil \rceil
