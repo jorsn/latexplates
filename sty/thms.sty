@@ -6,7 +6,7 @@
 
 
 % declare theorems only if not already defined
-\DeclareRobustCommand{\declarefallbackthm}[2][]{%
+\NewDocumentCommand \providetheorem { O{} m } {
   \ifcsname #2\endcsname\else\declaretheorem[#1]{#2}\fi
 }
 
@@ -30,20 +30,19 @@
 }{\endlist}
 \let\subthm\item
 
-\DeclareRobustCommand{\declaresubthm}[1]{%
-  \newcounter{sub#1}[#1]
-  \ExplSyntaxOn
+\NewDocumentCommand \declaresubtheorem {m} {%
+  \newcounter{sub #1}[#1]
   \cs_gset:cpn { thesub #1 } { \use:c { the #1 } \alph{sub #1} }
   \AddToHook{package/cleveref/after}{ \crefalias{sub #1}{#1} }
 }
 
-\declarefallbackthm[style=definition]{definition}
-\declaresubthm{definition}
-\declarefallbackthm[style=remark]{remark}
-\declaresubthm{remark}
+\providetheorem[style=definition]{definition}
+\declaresubtheorem{definition}
+\providetheorem[style=remark]{remark}
+\declaresubtheorem{remark}
 
 \clist_map_inline:nn { proposition, theorem, lemma, corollary, claim, conjecture, problem, example }
 {
-  \declarefallbackthm{#1}
-  \declaresubthm{#1}
+  \providetheorem{#1}
+  \declaresubtheorem{#1}
 }
