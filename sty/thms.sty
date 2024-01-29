@@ -1,7 +1,9 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{thms}[2023/01/25 my default theorems]
+\RequirePackage{expl3}
+\ProvidesExplPackage{thms}{2023-01-29}{0.2}{providetheorem, sub- and default theorems}
 
 \RequirePackage{amsthm,thmtools}
+
 
 % declare theorems only if not already defined
 \DeclareRobustCommand{\declarefallbackthm}[2][]{%
@@ -32,8 +34,7 @@
   \newcounter{sub#1}[#1]
   \ExplSyntaxOn
   \cs_gset:cpn { thesub #1 } { \use:c { the #1 } \alph{sub #1} }
-  \ExplSyntaxOn
-  \AddToHook{package/cleveref/after}{ \crefalias{sub#1}{#1} }
+  \AddToHook{package/cleveref/after}{ \crefalias{sub #1}{#1} }
 }
 
 \declarefallbackthm[style=definition]{definition}
@@ -41,14 +42,8 @@
 \declarefallbackthm[style=remark]{remark}
 \declaresubthm{remark}
 
-\RequirePackage{expl3}
-
-\ExplSyntaxOn
 \clist_map_inline:nn { proposition, theorem, lemma, corollary, claim, conjecture, problem, example }
 {
   \declarefallbackthm{#1}
   \declaresubthm{#1}
 }
-\ExplSyntaxOff
-
-\endinput
