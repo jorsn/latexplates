@@ -2,12 +2,25 @@
 \ProvidesClass{IEEEtranPlus}[2024-01-23 v0.0.0 IEEEtran with improved defaults]
 
 \RequirePackage{etoolbox}
+
+\DeclareOption{twocolumn}{
+  \PassOptionsToClass{\CurrentOption}{ifcol}
+}
+\DeclareOption{onecolumn}{
+  \PassOptionsToClass{\CurrentOption}{ifcol}
+}
+
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{IEEEtran}}
+
+\ExecuteOptions{twocolumn}
 \ProcessOptions\relax
 
 \RequirePackage{ifcol}
 
-\ifonecol
+\iftwocol
+  \PassOptionsToClass{twocolumn}{IEEEtran}
+\else
+  \PassOptionsToClass{onecolumn}{IEEEtran}
   \providecommand{\CLASSINPUTtoptextmargin}{3cm}
   \providecommand{\CLASSINPUTbottomtextmargin}{3cm}
   \providecommand{\CLASSINPUTinnersidemargin}{2cm}

@@ -4,8 +4,6 @@
 \newif\ifonecol
 \newif\iftwocol
 
-\twocolfalse
-
 \DeclareOption{onecolumn}{
   \onecoltrue\twocolfalse
 }
@@ -13,7 +11,13 @@
   \onecolfalse\twocoltrue
 }
 
+\ExecuteOptions{twocolumn}
 \ProcessOptions\relax
 
-\NewExpandableDocumentCommand \onecol {+m} {\ifonecol#1\fi}
-\NewExpandableDocumentCommand \twocol {+m} {\iftwocol#1\fi}
+\NewExpandableDocumentCommand \onecol {+m} {#1}
+\NewExpandableDocumentCommand \twocol {+m} {#1}
+\ifonecol
+  \DeclareExpandableDocumentCommand \twocol {+m} {}
+\else
+  \DeclareExpandableDocumentCommand \onecol {+m} {}
+\fi
