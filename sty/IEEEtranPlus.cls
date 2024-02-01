@@ -2,6 +2,7 @@
 \ProvidesClass{IEEEtranPlus}[2024-01-23 v0.0.0 IEEEtran with improved defaults]
 
 \RequirePackage{etoolbox}
+\newif\ifieeeplus@compress\ieeeplus@compressfalse
 
 \DeclareOption{twocolumn}{
   \PassOptionsToClass{\CurrentOption}{ifcol}
@@ -9,6 +10,8 @@
 \DeclareOption{onecolumn}{
   \PassOptionsToClass{\CurrentOption}{ifcol}
 }
+
+\DeclareOption{compress}{\ieeeplus@compresstrue}
 
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{IEEEtran}}
 
@@ -19,6 +22,10 @@
 
 \iftwocol
   \PassOptionsToClass{twocolumn}{IEEEtran}
+  \ifieeeplus@compress
+    \providecommand{\CLASSINPUTtoptextmargin}{1in}
+    \providecommand{\CLASSINPUTbottomtextmargin}{1in}
+  \fi
 \else
   \PassOptionsToClass{onecolumn}{IEEEtran}
   \providecommand{\CLASSINPUTtoptextmargin}{3cm}
