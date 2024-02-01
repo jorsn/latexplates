@@ -19,7 +19,17 @@
 \ProvideIf[false]{arxiv} % if arXiv submission
 \ProvideIf[false]{compress} % if as much as possible should be compressed
 
-\IfClassLoadedWithOptionsTF \class {final} {} {\overfullrule=2cm}
+\ProvideIf[false]{final}
+\ProvideIf[true]{draft}
+\IfClassLoadedWithOptionsTF \class {final} {\finaltrue\draftfalse} {}
+\IfClassLoadedWithOptionsTF \class {ieee} {\ieeetrue} {}
+\IfClassLoadedWithOptionsTF \class {arxiv} {\arxivtrue} {}
+\IfClassLoadedWithOptionsTF \class {compress} {\compresstrue} {}
+
+\ifdraft
+  \overfullrule=2cm
+\fi
+
 \frenchspacing
 
 \ifieee % ieeeXplore doesn't accept hyperlinks
