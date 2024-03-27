@@ -57,7 +57,10 @@
 \usepackage{multicol}
 \usepackage{tabularray}
 
-\usepackage[capitalize,noabbrev]{cleveref}
+\ifcompress\else
+  \PassOptionsToPackage{noabbrev}{cleveref}
+\fi
+\usepackage[capitalize]{cleveref}
 \crefname{equation}{}{}
 \Crefname{equation}{Equation}{Equations}
 
