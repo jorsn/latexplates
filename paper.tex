@@ -64,12 +64,9 @@
 \crefname{equation}{}{}
 \Crefname{equation}{Equation}{Equations}
 
-\IfFileExists{short.bib}{
-  \addbibresource{short.bib}
-}{}
-\IfFileExists{bib.bib}{
-  \addbibresource{bib.bib}
-}{}
+% keeping '\addbibresource' verbatim in the document allows
+% some editor plugins to autocomplete using the right bib files
+\tryWithFiles\addbibresource{short.bib,bib.bib}
 
 \title{%
   New results on the speed of brown foxes

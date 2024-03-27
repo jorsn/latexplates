@@ -10,6 +10,17 @@
   }
 }
 
+\NewDocumentCommand{\tryWithFiles}{mom}{
+  \clist_map_inline:nn {#3} {
+    \IfFileExists{##1}{
+      \IfValueTF{#2}{
+        #1[#2]{##1}
+      }{
+        #1{##1}
+      }
+    }{}
+  }
+}
 
 % extend the search path for tex files
 
