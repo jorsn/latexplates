@@ -15,6 +15,7 @@
 
 \ProvideIf[false]{ieee}  % if ieee submission (mainly disables hyperref)
 \ProvideIf[false]{ieeepreview}
+\ProvideIf[false]{conference}
 \ProvideIf[false]{blind} % if double-blind submission
 \ProvideIf[false]{arxiv} % if arXiv submission
 \ProvideIf[false]{compress} % if as much as possible should be compressed
@@ -23,6 +24,7 @@
 \ProvideIf[true]{draft}
 \IfClassLoadedWithOptionsTF \class {final} {\finaltrue\draftfalse} {}
 \IfClassLoadedWithOptionsTF \class {ieee} {\ieeetrue} {}
+\IfClassLoadedWithOptionsTF \class {conference} {\conferencetrue} {}
 \IfClassLoadedWithOptionsTF \class {arxiv} {\arxivtrue} {}
 \IfClassLoadedWithOptionsTF \class {compress} {\compresstrue} {}
 
@@ -32,7 +34,12 @@
 
 \frenchspacing
 
-\ifieee % ieeeXplore doesn't accept hyperlinks
+\ifieee
+  \ifconference
+    % some IEEE conferences require fontsize >= 10pt
+    \PassOptionsToPackage{cmex10}{amsmath}
+  \fi
+  % ieeeXplore doesn't accept hyperlinks and requires its bibtex style
   \usepackage[hyperref=false,bibtex]{boilerplate}
 \else
   \ifarxiv
