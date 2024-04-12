@@ -23,8 +23,10 @@
 \iftwocol
   \PassOptionsToClass{twocolumn}{IEEEtran}
   \ifieeeplus@compress
-    \providecommand{\CLASSINPUTtoptextmargin}{1in}
-    \providecommand{\CLASSINPUTbottomtextmargin}{1in}
+    % >= 0.5 inches was required by ISIT 2024
+    % (https://web.archive.org/web/20240412094337/https://2024.ieee-isit.org/information-autors)
+    \providecommand{\CLASSINPUTtoptextmargin}{0.5in}
+    \providecommand{\CLASSINPUTbottomtextmargin}{0.5in}
   \fi
 \else
   \PassOptionsToClass{onecolumn}{IEEEtran}
