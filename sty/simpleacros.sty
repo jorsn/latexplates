@@ -7,11 +7,7 @@
 \ProcessOptions*
 
 \RequirePackage{acro}
-
-\cs_new:Nn \keyval_map_function:nN {
-  \prop_set_from_keyval:Nn \l_tmpa_prop {#1}
-  \prop_map_function:NN \l_tmpa_prop #2
-}
+\RequirePackage{bootstrap}
 
 \NewExpandableDocumentCommand \SimpleAcro {mm} {
   \DeclareAcronym{#1}{short={\MakeUppercase{#1}},long={#2}}
