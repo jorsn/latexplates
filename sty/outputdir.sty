@@ -1,0 +1,72 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesExplPackage{outputdir}{2024-04-23}{0.1}{use output dir in latex}
+
+\keys_define:nn { bootstrap } {
+  noise_size .int_set:N = \bootstrap_buf_size,
+  noise_size .initial:n = 25000,
+}
+
+\ProcessKeysOptions{ bootstrap }
+
+\str_set:NV \bootstrap_logfile { \c_sys_jobname_str .log }
+\str_set:NV \bootstrap_outputdir_cache { \c_sys_jobname_str .outputdir }
+
+%\cs_generate_variant:Nn \str_const:Nn { Nf }
+
+\file_if_exist:VTF \bootstrap_outputdir_cache {
+  \file_get:VnN \bootstrap_outputdir_cache {} \l_tmpa_tl
+  \str_const:NV \outputdir \l_tmpa_tl
+}{
+
+  \file_get:VnN \bootstrap_logfile {\ExplSyntaxOff} \l_tmpa_tl
+  
+  % TODO: determine max TeX's buffer size
+  \iow_log:n { }
+  \iow_log:n { Fill~TeXs~log~buffer~so~it~flushes~it~to~disk: }
+  \iow_log:n { }
+  %\file_input:n {outputdir.noise}
+  \int_new:N \bootstrap_noise_lines
+  \int_set:Nn \bootstrap_noise_lines {\bootstrap_buf_size / 8 / 79}
+  \int_step_inline:nn \bootstrap_noise_lines {
+    \iow_log:n {aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa}
+  }
+  
+  % do the actual work: we search  the logs for something like
+  % '(build//main.relax)'
+  
+  \cs_new:Nn \bootstrap_tl_extract_parenthesized_from_suffix:nnNTF {
+    \regex_extract_once:nnNTF { \(([^()]*#1)\) } {#2} #3 {#4} {#5}
+  }
+  \cs_generate_variant:Nn \bootstrap_tl_extract_parenthesized_from_suffix:nnNTF { VVNTF }
+  
+  \file_get:VnNTF { \c_sys_jobname_str .log } { \ExplSyntaxOff } \l_tmpa_tl {
+      % extract pattern (<aux file path>) from log file
+      \bootstrap_tl_extract_parenthesized_from_suffix:VVNTF \bootstrap_logfile \l_tmpa_tl \l_tmpa_seq {
+        \tl_set:Ne \l_tmpa_tl {\seq_item:Nn \l_tmpa_seq 2}
+        \file_parse_full_name:nNNN \l_tmpa_tl \l_tmpa_tl \l_tmpb_tl \l_tmpb_tl
+        \str_const:NV \outputdir \l_tmpa_tl
+        \iow_open:NV \g_tmpa_iow \bootstrap_outputdir_cache
+        \iow_now:NV \g_tmpa_iow \outputdir
+        \iow_close:N \g_tmpa_iow
+
+      }{
+        \PackageError{bootstrap}{\textbackslash outputdir~cannot~be~set:~cannot~parse~log~file}
+      }
+    } {
+      \PackageError{bootstrap}{\textbackslash outputdir~cannot~not~be~set:~cannot~access~log~file}
+    }
+
+}
+
+%%%%%%
+% Alternative approach using fls file which is only generated if TeX is called
+% with option -recorder
+
+%\file_get:nnN {\c_sys_jobname_str .fls} {} \g_fls_tl
+%\cs_new:Nn \tl_set_to_fls_path:Nn {
+%  \regex_extract_once:nVN { .*(OUTPUT|INPUT)\ *(.*#2)\ *(OUTPUT|INPUT|$) } \g_fls_tl \l_tmpa_seq
+%  \tl_set:Ne #1 {\seq_item:Nn \l_tmpa_seq 3}
+%}
+%\cs_generate_variant:Nn \tl_set_to_fls_path:Nn { Nx , Ne , NV , Nf , cn , cx , ce , cV , cf }
+
+% vim: ts=2 sw=2

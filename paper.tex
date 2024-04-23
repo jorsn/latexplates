@@ -102,9 +102,11 @@
 }
 \makeatother
 
-\IfFileExists{local-shorthands.tex}{
-  \input{local-shorthands.tex}
-}{}
+%\usepackage{tikz}
+%\usetikzlibrary{external}
+%\tikzexternalize
+% needed for correct -output-dir tikz-external compilation
+%\tikzset{external/shell escape/.add={}{ -output-directory \outputdir/}}
 
 \usepackage{simpleacros}
 \ifcompress
@@ -124,6 +126,7 @@
   bc = broadcast channel,
 }
 
+\tryWithFiles\input{local-shorthands}
 
 \begin{document}
 
