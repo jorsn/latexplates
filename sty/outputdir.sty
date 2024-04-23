@@ -14,22 +14,29 @@
 
 %\cs_generate_variant:Nn \str_const:Nn { Nf }
 
-\file_if_exist:VTF \bootstrap_outputdir_cache {
-  \file_get:VnN \bootstrap_outputdir_cache {} \l_tmpa_tl
+\cs_if_exist:NTF \iow_now:NV {}{
+  \cs_generate_variant:Nn \iow_now:Nn { Ne }
+}
+\cs_if_exist:NTF \regex_extract_once:nVN {}{
+  \cs_generate_variant:Nn \regex_extract_once:nnN { nVN }
+}
+
+\file_if_exist:nTF \bootstrap_outputdir_cache {
+  \file_get:nnN \bootstrap_outputdir_cache {} \l_tmpa_tl
   \str_const:NV \outputdir \l_tmpa_tl
 }{
 
-  \file_if_exist:VTF \bootstrap_flsfile {
+  \file_if_exist:nTF \bootstrap_flsfile {
     \file_get:nnN \bootstrap_flsfile {\ExplSyntaxOff} \l_tmpa_tl
     \cs_new:Nn \tl_set_to_fls_path:Nn {
       \regex_extract_once:nVN { .*(OUTPUT|INPUT)\ *(.*#2)\ *(OUTPUT|INPUT|$) } \l_tmpa_tl \l_tmpa_seq
-      \tl_set:Ne #1 {\seq_item:Nn \l_tmpa_seq 3}
+      \tl_set:Nx #1 {\seq_item:Nn \l_tmpa_seq 3}
     }
     \cs_generate_variant:Nn \tl_set_to_fls_path:Nn { Nx , Ne , NV , Nf , cn , cx , ce , cV , cf }
     \tl_set_to_fls_path:NV \l_tmpa_tl \bootstrap_logfile
   } {
 
-    \file_get:VnN \bootstrap_logfile {\ExplSyntaxOff} \l_tmpa_tl
+    \file_get:nnN \bootstrap_logfile {\ExplSyntaxOff} \l_tmpa_tl
 
     % TODO: determine max TeX's buffer size
     \iow_log:n { }
@@ -50,10 +57,10 @@
     }
     \cs_generate_variant:Nn \bootstrap_tl_extract_parenthesized_from_suffix:nnNTF { VVNTF }
 
-    \file_get:VnNTF { \c_sys_jobname_str .log } { \ExplSyntaxOff } \l_tmpa_tl {
+    \file_get:nnNTF \bootstrap_logfile { \ExplSyntaxOff } \l_tmpa_tl {
       % extract pattern (<aux file path>) from log file
       \bootstrap_tl_extract_parenthesized_from_suffix:VVNTF \bootstrap_logfile \l_tmpa_tl \l_tmpa_seq {
-        \tl_set:Ne \l_tmpa_tl {\seq_item:Nn \l_tmpa_seq 2}
+        \tl_set:Nx \l_tmpa_tl {\seq_item:Nn \l_tmpa_seq 2}
       }{
         \PackageError{bootstrap}{\textbackslash outputdir~cannot~be~set:~cannot~parse~log~file}
       }
@@ -65,8 +72,11 @@
 
   \file_parse_full_name:nNNN \l_tmpa_tl \l_tmpa_tl \l_tmpb_tl \l_tmpb_tl
   \str_const:NV \outputdir \l_tmpa_tl
-  \iow_open:NV \g_tmpa_iow \bootstrap_outputdir_cache
-  \iow_now:NV \g_tmpa_iow \outputdir
+  \iow_open:Nn \g_tmpa_iow \bootstrap_outputdir_cache
+  \cs_if_exist:NTF \iow_now:NV {}{
+    \cs_generate_variant:Nn \iow_now:Nn { Ne }
+  }
+  \iow_now:Ne \g_tmpa_iow \outputdir
   \iow_close:N \g_tmpa_iow
 
 }
