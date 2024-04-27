@@ -2,6 +2,14 @@
 \RequirePackage{expl3,l3keys2e} % key-value options
 \ProvidesExplPackage{bootstrap}{2023-08-15}{0.3}{defintions for document bootstrapping}
 
+\keys_define:nn { bootstrap } {
+  flushbuffer_noise_size .code:n = {
+    \PassOptionsToPackage{flushbuffer_noise_size=#1}{outputdir}
+  }
+}
+
+\ProcessKeysOptions{ bootstrap }
+
 \RequirePackage{xparse} % provides \(New|Provide|Declare)DocumentCommand
 \NewDocumentCommand \ProvideIf { O{false} m } {
   \cs_if_exist:cTF { if #2 } {} {
