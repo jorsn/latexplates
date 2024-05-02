@@ -1,12 +1,17 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesExplPackage{outputdir}{2024-04-23}{0.1}{use output dir in latex}
+\ProvidesExplPackage{outputdir}{2024-05-02}{0.1.1}{use path of output dir in latex code}
 
 \keys_define:nn { outputdir } {
   flushbuffer_noise_size .int_set:N = \outputdir_noise_size,
   flushbuffer_noise_size .initial:n = 55000,
 }
 
-\ProcessKeysOptions{ outputdir }
+\IfFormatAtLeastTF {2022-06-01} {
+  \ProcessKeyOptions[ outputdir ]
+} {
+  \RequirePackage{l3keys2e}
+  \ProcessKeysOptions{ outputdir }
+}
 
 \str_set:NV \outputdir_logfile { \c_sys_jobname_str .log }
 \str_set:NV \outputdir_flsfile { \c_sys_jobname_str .fls }

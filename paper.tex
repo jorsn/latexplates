@@ -8,31 +8,29 @@
 \RequirePackage{sty/bootstrap}
 \PrependInputPath{sty/img,fig}
 
-\ProvideExpandableDocumentCommand \class {} {IEEEtranPlus}
-\documentclass [onecolumn] \class
+\ProvideOptions{notecolumn}
 
-\usepackage{xparse}
+\WithOptions
+\documentclass {IEEEtranPlus}
 
-\ProvideIf[false]{ieee}  % if ieee submission (mainly disables hyperref)
-\ProvideIf[false]{ieeepreview}
-\ProvideIf[false]{conference}
-\ProvideIf[false]{blind} % if double-blind submission
-\ProvideIf[false]{arxiv} % if arXiv submission
-\ProvideIf[false]{compress} % if as much as possible should be compressed
-
-\ProvideIf[false]{final}
+\ProvideIfOptions {ieee, conference, arxiv, compress, final, blind}
 \ProvideIf[true]{draft}
-\IfClassLoadedWithOptionsTF \class {final} {\finaltrue\draftfalse} {}
-\IfClassLoadedWithOptionsTF \class {ieee} {\ieeetrue} {}
-\IfClassLoadedWithOptionsTF \class {conference} {\conferencetrue} {}
-\IfClassLoadedWithOptionsTF \class {arxiv} {\arxivtrue} {}
-\IfClassLoadedWithOptionsTF \class {compress} {\compresstrue} {}
+\iffinal\draftfalse\fi
 
 \ifdraft
   \overfullrule=2cm
 \fi
 
 \frenchspacing
+\ifcompress
+  \IfClassLoadedTF {IEEEtran}
+    \def\citepunct{,\,}
+    \def\citedash{--}
+    \renewcommand \IEEEiedlistdecl {
+      \IEEElabelindent=0pt
+    }
+  }
+\fi
 
 \ifieee
   \ifconference
@@ -50,7 +48,7 @@
   \fi
 \fi
 
-\ifnum 1=\ifieeepreview 1\else\ifieee 1\else 0\fi\fi
+\ifieee
   \DeclareDocumentCommand{\orcidlink}{m}{}
 \fi
 

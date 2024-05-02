@@ -1,6 +1,6 @@
 \NeedsTeXFormat{LaTeX2e}
 \RequirePackage{bootstrap}
-\ProvidesExplPackage{boilerplate}{2023-05-15}{0.2}{my default boilerplate}
+\ProvidesExplPackage{boilerplate}{2024-05-02}{0.2.1}{my default boilerplate}
 
 \bool_new:N \l_boilerplate_final
 \tl_new:N \l_boilerplate_bibEngine
@@ -51,7 +51,7 @@
   },
 }
 
-\ProcessKeysOptions{ boilerplate }
+\ProcessKeyOptions[ boilerplate ]
 
 \if_bool:N \l_boilerplate_final
 \if_bool:N \l_boilerplate_draft
