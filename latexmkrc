@@ -1,5 +1,6 @@
 $out_dir = 'build/'; # use separate output directory
 $pdf_mode = 1;       # use LuaLaTeX (1: pdfLaTeX, 4: LuaLaTeX, 5: XeLaTeX)
+$synctex = 1;
 @default_files = ('paper');
 ensure_path( 'TTFONTS',       'fonts//');
 ensure_path( 'OPENTYPEFONTS', 'fonts//');
@@ -7,7 +8,14 @@ ensure_path( 'OPENTYPEFONTS', 'fonts//');
 $lualatex_files = qr/.*(poster|responseletter).*\.tex/;
 
 $pdflatex_orig = $pdflatex;
-$pdflatex = 'internal compile -shell-escape %O %S';
+
+if ($synctex) {
+  $synctex_str = '-synctex=' . $synctex;
+} else {
+  $synctex_str = ''
+}
+
+$pdflatex = 'internal compile ' . $synctex_str . ' -shell-escape %O %S';
 
 sub compile {
 
