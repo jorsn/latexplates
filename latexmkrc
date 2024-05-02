@@ -9,6 +9,13 @@ $lualatex_files = qr/.*(poster|responseletter).*\.tex/;
 
 $pdflatex_orig = $pdflatex;
 
+if (-d '/cocalc/') {
+  $cocalc = 1;
+  $success_cmd = 'cp %D "$(dirname %S)" && cp %Z/%R.synctex.gz "$(dirname %S)"';
+} else {
+  $cocalc = 0;
+}
+
 if ($synctex) {
   $synctex_str = '-synctex=' . $synctex;
 } else {
