@@ -7,7 +7,7 @@ ensure_path( 'OPENTYPEFONTS', 'fonts//');
 $lualatex_files = qr/.*(poster|responseletter).*\.tex/;
 
 $pdflatex_orig = $pdflatex;
-$pdflatex = 'internal compile %O %S';
+$pdflatex = 'internal compile -shell-escape %O %S';
 
 sub compile {
 
