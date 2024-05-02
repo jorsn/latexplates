@@ -1,1 +1,8 @@
 build/
+/build
+
+# useful for cocalc, which puts some state files in the project dir
+*.pdf
+*.synctex.gz
+*.syncdb
+*.sage-chat
