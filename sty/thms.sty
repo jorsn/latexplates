@@ -2,8 +2,30 @@
 \RequirePackage{expl3}
 \ProvidesExplPackage{thms}{2023-01-29}{0.2}{providetheorem, sub- and default theorems}
 
+\keys_define:nn { thms } {
+  compress .bool_set:N = \thms_compress_bool,
+  compress  .initial:n = false,
+  blackqed .bool_set:N = \thms_blackqed_bool,
+  blackqed  .initial:n = false,
+}
+
+\ProcessKeyOptions[ thms ]
+
 \RequirePackage{amsthm,thmtools}
 
+\bool_if:NTF \thms_compress_bool {
+  \cs_gset:Npn \thms_acro_style_str { short }
+  \cs_set:Npn \thms_ac:n {\acs}
+  \cs_set:Npn \thms_Ac:n {\Acs}
+}{
+  \cs_gset:Npn \thms_acro_style_str { long }
+  \cs_set:Npn \thms_ac:n {\acl}
+  \cs_set:Npn \thms_Ac:n {\Acl}
+}
+
+\bool_if:nTF \thms_blackqed_bool {
+  \RenewDocumentCommand \qedsymbol {} {\ensuremath{\blacksquare}}
+} {}
 
 % declare theorems only if not already defined
 \NewDocumentCommand \providetheorem { O{} m } {
@@ -36,13 +58,48 @@
   \AddToHook{package/cleveref/after}{ \crefalias{sub #1}{#1} }
 }
 
-\providetheorem[style=definition]{definition}
-\declaresubtheorem{definition}
-\providetheorem[style=remark]{remark}
-\declaresubtheorem{remark}
-
-\clist_map_inline:nn { proposition, theorem, lemma, corollary, claim, conjecture, problem, example }
-{
-  \providetheorem{#1}
-  \declaresubtheorem{#1}
+\NewDocumentCommand \thms_plain_ProvideTheoremAndSub {O{} mm} {
+  \providetheorem[#1]{#3}
+  \declaresubtheorem{#3}
 }
+
+\RequirePackage{acro}
+\NewDocumentCommand \DeclareThmAcro {mm} {
+  \exp_args:Nff \DeclareAcronym{#2}{
+    short = \MakeUppercase #1\acdot,
+    short-plural-form = \MakeUppercase #1s\acdot,
+    long = \MakeUppercase #2,
+  }
+  \clist_map_inline:nn { first, subsequent, single } {
+    \bool_if:NTF \thms_compress_bool {
+      \AcroPropertiesSet{#2} { ##1-style = short }
+    } {
+      \AcroPropertiesSet{#2} { ##1-style = long }
+    }
+  }
+}
+
+
+\NewDocumentCommand \ProvideTheoremAndSub {O{}mm} {
+  \DeclareThmAcro{#2}{#3}
+  \thms_plain_ProvideTheoremAndSub
+    [refname={\thms_ac:n {#3}, \thms_ac:n {#3}}, Refname={\thms_Ac:n {#3}, \thms_Ac:n {#3}}, #1]
+    {#2}
+    {#3}
+}
+
+\keyval_map_function:nN {
+  prop = proposition,
+  thm  = theorem,
+  lem  = lemma,
+  cor  = corollary,
+  conj = conjecture,
+  prob = problem,
+  ex   = example,
+} \ProvideTheoremAndSub
+
+\ProvideTheoremAndSub{claim}{claim}
+\ProvideTheoremAndSub[style=definition]{def}{definition}
+\ProvideTheoremAndSub[style=remark]{rem}{remark}
+
+% vim: ts=2 sw=2
