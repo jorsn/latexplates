@@ -42,6 +42,13 @@
 % itw: submission untested
 , venue/itw2024       .code:n = \ExecuteKeyOptions [ieeep] { conference, paper=letter, margins = { top = 0.5in, bottom = 0.5in } }
 
+, conference .code:n = {
+    \PassOptionsToClass{conference}{IEEEtran}
+    % some IEEE conferences require fontsize >= 10pt
+    \PassOptionsToPackage{cmex10}{amsmath}
+  }
+
+
 , unknown        .code:n = { \exp_args:NV \PassOptionsToClass \l_keys_key_str {IEEEtran} }
 }
 
