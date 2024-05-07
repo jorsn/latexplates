@@ -29,7 +29,9 @@
 
 % declare theorems only if not already defined
 \NewDocumentCommand \providetheorem { O{} m } {
-  \ifcsname #2\endcsname\else\declaretheorem[#1]{#2}\fi
+  \cs_if_exist:cTF {#2} {} {
+    \declaretheorem[#1]{#2}
+  }
 }
 
 % subthms counters (work only for theorems defined with thmtools)
@@ -82,10 +84,12 @@
 
 \NewDocumentCommand \ProvideTheoremAndSub {O{}mm} {
   \DeclareThmAcro{#2}{#3}
-  \thms_plain_ProvideTheoremAndSub
-    [refname={\thms_ac:n {#3}, \thms_ac:n {#3}}, Refname={\thms_Ac:n {#3}, \thms_Ac:n {#3}}, #1]
-    {#2}
-    {#3}
+  \AtBeginDocument{
+    \thms_plain_ProvideTheoremAndSub
+      [refname={\thms_ac:n {#3}, \thms_ac:n {#3}}, Refname={\thms_Ac:n {#3}, \thms_Ac:n {#3}}, #1]
+      {#2}
+      {#3}
+  }
 }
 
 \keyval_map_function:nN {
