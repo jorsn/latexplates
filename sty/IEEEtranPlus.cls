@@ -40,7 +40,10 @@
     }
     %margins for a4: { top=1.84cm, bottom=4.28cm, inner=1.23cm, outer=1.28cm }
 % itw: submission untested
-, venue/itw2024       .code:n = \ExecuteKeyOptions [ieeep] { conference, paper=letter, margins = { top = 0.5in, bottom = 0.5in } }
+, venue/itw2024       .code:n = \ExecuteKeyOptions [ieeep] {
+    conference, paper=letter,
+    margins = {top=0.735in, bottom=1.02in},
+  }
 
 , conference .code:n = {
     \PassOptionsToClass{conference}{IEEEtran}
