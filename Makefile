@@ -1,5 +1,5 @@
 main_name = paper
-arxivFileName = paper
+arxivFileName = ms
 builddir = build
 
 .PHONY: all arxiv clean
