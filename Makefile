@@ -17,3 +17,6 @@ $(builddir)/%.tar.gz: $(builddir)/%.pdf %.tex
 
 clean:
 	rm -fr $(builddir)
+
+ssh-cocalc: ssh-%:
+	ssh "$$(git remote get-url $* | sed 's/\(@[^:]\+\)\(:.*\)\?$$/\1/g')"
