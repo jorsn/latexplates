@@ -20,3 +20,12 @@ clean:
 
 ssh-cocalc: ssh-%:
 	ssh "$$(git remote get-url $* | sed 's/\(@[^:]\+\)\(:.*\)\?$$/\1/g')"
+
+start-cocalc:
+	@project_id=$$(git remote get-url cocalc | sed -E 's/^([a-z0-9]{8})([a-z0-9]{4})([a-z0-9]{4})([a-z0-9]{4})([a-z0-9]+)@ssh.cocalc.com.*$$/\1-\2-\3-\4-\5/'); \
+	 if [ -r cocalc_api_key ]; then \
+	   curl -u $$(< cocalc_api_key): -d bash=true -d command=true -d project_id=$$project_id https://cocalc.com/api/v1/project_exec; \
+	 else \
+	   echo "error: can't connect to cocalc: file cocalc_api_key does not exist." >&2; \
+	   exit 1; \
+	 fi
