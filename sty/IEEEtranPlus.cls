@@ -36,7 +36,7 @@
 , venue/isit2024      .code:n = \ExecuteKeyOptions [ieeep] { conference, paper=a4, margins = { top=0.5in, bottom=0.5in } }
 , venue/globecom2024  .code:n = \ExecuteKeyOptions [ieeep] {
     conference, paper=letter,
-    margins = { top=0.73in, bottom=0.96in, inner=0.58in, outer=0.59in }
+    margins = { top=0.73in, bottom=0.97in, inner=0.585in, outer=0.59in }
     }
     %margins for a4: { top=1.84cm, bottom=4.28cm, inner=1.23cm, outer=1.28cm }
 % itw: submission untested
@@ -66,8 +66,12 @@
 \iftwocol
   \bool_if:nTF \ieeep_compress_bool {
     \AddToHook {class/IEEEtran/after} {
-      \setlength \textfloatsep    {0.7\baselineskip plus  0.1\baselineskip minus 0.4\baselineskip}
-      \setlength \dbltextfloatsep {0.7\baselineskip plus  0.1\baselineskip minus 0.4\baselineskip}
+      \setlength \floatsep         {0.4\baselineskip plus  0.2\baselineskip minus 0.2\baselineskip}
+      \setlength \dblfloatsep      {0.4\baselineskip plus  0.2\baselineskip minus 0.2\baselineskip}
+      \setlength \textfloatsep     {0.4\baselineskip plus  0.2\baselineskip minus 0.2\baselineskip}
+      \setlength \dbltextfloatsep  \textfloatsep
+      \setlength \abovecaptionskip {0.3\baselineskip plus  0.2\baselineskip minus 0.2\baselineskip}
+      \setlength \belowcaptionskip \abovecaptionskip
     }
   } {}
 \else
