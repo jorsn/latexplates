@@ -1,0 +1,23 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesExplPackage{bootstrap}{2024-08-26}{0.1.0}{use l3keys with new kvoption syntax and old LaTeX}
+
+\IfFormatAtLeastTF {2022-06-01} {} {
+  \RequirePackage{l3keys2e}
+  \NewDocumentCommand \DeclareKeys {o} {
+    \IfValueTF {#1}
+      { \keys_define:nn {#1} }
+      { \exp_args:No \keys_define:nn { \@currfile } }
+   }
+  \NewDocumentCommand \SetKeys {o} {
+    \IfValueTF {#1}
+      { \keys_set:nn {#1} }
+      { \exp_args:No \keys_set:nn { \@currfile } }
+   }
+  \NewDocumentCommand \ProcessKeyOptions {o} {
+    \IfValueTF {#1}
+      { \ProcessKeysOptions {#1} }
+      { \exp_args:No \ProcessKeysOptions { \@currfile } }
+  }
+}
+
+% vim: ts=2 sw=2

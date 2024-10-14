@@ -62,8 +62,9 @@
 
 \seq_put_left:NV \l_file_search_path_seq \CurrentFilePath
 
+\RequirePackage{l3keys-compat}
 
-\keys_define:nn { bootstrap } {
+\DeclareKeys [ bootstrap ] {
 %, path .code:n = { \PrependInputPath{#1} }
 %
 %%, class .code:n = {
@@ -80,25 +81,6 @@
 
 , flushbuffer_noise_size .code:n = {
     \PassOptionsToPackage{flushbuffer_noise_size=#1}{outputdir}
-  }
-}
-
-\IfFormatAtLeastTF {2022-06-01} {} {
-  \RequirePackage{l3keys2e}
-  \NewDocumentCommand \DeclareKeys {o} {
-    \IfValueTF {#1}
-      { \keys_define:nn {#1} }
-      { \exp_args:No \keys_define:nn { \@currfile } }
-   }
-  \NewDocumentCommand \SetKeys {o} {
-    \IfValueTF {#1}
-      { \keys_set:nn {#1} }
-      { \exp_args:No \keys_set:nn { \@currfile } }
-   }
-  \NewDocumentCommand \ProcessKeyOptions {o} {
-    \IfValueTF {#1}
-      { \ProcessKeysOptions {#1} }
-      { \exp_args:No \ProcessKeysOptions { \@currfile } }
   }
 }
 
