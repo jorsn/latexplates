@@ -5,18 +5,20 @@
   \url{https://github.com/jorsn/latexplates}.
 \end{anfxnote}
 
-\begin{anfxwarning}[author=\noindent JR]{edit notes}
+\begin{anfxwarning}{edit notes}
   The \textsf{fixme} package is loaded, so
   \begin{itemize}
     \item you can make editorial notes with
       \\
-        \texttt{\cmd{fxnote}[author=<author>]%
+        \texttt{\cmd{fxnote}%
       \twocol{\\\hbox{}\quad}%
           \{<margin comment>\}},
       \\
-        \texttt{\cmd{fxnote*}[author=<author>]%
+        \texttt{\cmd{fxnote*}%
       \twocol{\\\hbox{}\quad}%
           \{<comment>\}\{<text to highlight>\}},
+        where \texttt{fx} should be replaced by your author prefix (look up
+        \texttt{\cmd{fxauthor}\{<shorthand>\}} in the document source)
 
   \item
     for notes that have to be resolved before submission,
@@ -69,7 +71,7 @@
       \verb|\expect| & $\expect$ \\
       \verb|\One|    & $\One$ \\
       \verb|\ind{e^{A^2} \le 1}| & $\ind{e^{A^2} \le 1}$ \\
-      \verb|\ind[\bigg]{a}|       & $\ind[\bigg]{a}$ \\
+      \verb|\ind[\bigg]{a}|      & $\ind[\bigg]{a}$ \\
     \end{tblr}
   \end{multicols}
 

@@ -17,6 +17,9 @@
   thms        .initial:n   =  true,
   shorthands  .bool_set:N  =  \l_boilerplate_shorthands,
   shorthands  .initial:n   =  true,
+
+  fixmeauthors .clist_set:N = \l_boilerplate_fixmeauthors,
+
   % final mode, draft mode or none
   final       .bool_set:N = \l_boilerplate_final,
   draft       .bool_set:N = \l_boilerplate_draft,
@@ -182,6 +185,7 @@
 %  \setreviewson
 %\fi:
 %\RequirePackage{xkvltxp}
+\PassOptionsToPackage{multiuser}{fixme}
 \if_bool:N \l_boilerplate_final
   \RequirePackage[final]{fixme}
 \else:
@@ -189,6 +193,12 @@
   \fxusetheme{color}
 \fi:
 \RenewExpandableDocumentCommand \englishlistfixmename {} {List~of~edit~notes}
+\NewDocumentCommand \addfixmeauthors {m} {
+  \clist_map_inline:Nn {#1} {
+    \FXRegisterAuthor {##1} {an##1} {\MakeUppercase{##1}}
+  }
+}
+\addfixmeauthors \l_boilerplate_fixmeauthors
 
 
 % tweaks
