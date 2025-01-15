@@ -87,6 +87,19 @@
 \RequirePackage{amsmath,mathtools}
 \RequirePackage{amssymb,amsxtra} % math symbols
 
+\NewDocumentEnvironment {automultline} {} {
+  \ifenv {twocol} {multline} {equation}
+  \ifonecol
+    \let \\ \relax
+  \fi
+} {\endifenv}
+\NewDocumentEnvironment {automultline*} {} {
+  \ifenv {twocol} {multline*} {equation*}
+  \ifonecol
+    \let \\ \relax
+  \fi
+} {\endifenv}
+
 % typography
 %% compatibility with pdfTeX, LuaTeX and XeTeX (modern TeX engines)
 \RequirePackage{iftex}

@@ -11,6 +11,17 @@
   }
 }
 
+\NewDocumentEnvironment {ifenv} {mmm} {
+  \legacy_if:nTF {#1}
+    { \use:c {#2} }
+    { \use:c {#3} }
+}{
+  \legacy_if:nTF {#1}
+    { \use:c {end #2} }
+    { \use:c {end #3} }
+}
+
+
 \NewDocumentCommand{\tryWithFiles}{mom}{
   \clist_map_inline:nn {#3} {
     \IfFileExists{##1}{
