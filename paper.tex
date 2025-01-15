@@ -126,7 +126,10 @@
 
 \maketitle
 
-\input edit-notes
+% Edit notes lead to weird formatting in IEEEtran twocol mode.
+\ifonecol
+  \input edit-notes
+\fi
 
 \section{Introduction}
 
