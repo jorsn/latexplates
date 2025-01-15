@@ -141,7 +141,7 @@
   \clist_new:N \l_boilerplate_bibresources
   \NewDocumentCommand{\addbibresource}{om}{
     \IfValueT{#1}{
-      \ClassWarning{boilerplate}{\noexpand\addbibresource:~ignore BibLaTeX options}
+      \ClassWarning{boilerplate}{\noexpand\addbibresource:~ignore~BibLaTeX~options}
     }
     \tl_set:Nn \l_tmpa_tl { #2 }
     \tl_reverse:N \l_tmpa_tl % remove suffix .bib
@@ -151,7 +151,7 @@
   }
   \NewDocumentCommand{\printbibliography}{o}{
     \IfValueT{#1}{
-      \ClassWarning{boilerplate}{\noexpand\printbibliography:~ignore BibLaTeX options}
+      \ClassWarning{boilerplate}{\noexpand\printbibliography:~ignore~BibLaTeX~options}
     }
     \bibliography{\l_boilerplate_bibresources}
   }
