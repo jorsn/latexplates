@@ -34,6 +34,7 @@
 , venue/tit/onecolumn .code:n = \ExecuteKeyOptions [ieeep] { journal, notecolumn }
 , venue/tit           .code:n = \ExecuteKeyOptions [ieeep] { journal }
 , venue/isit2024      .code:n = \ExecuteKeyOptions [ieeep] { conference, paper=a4, margins = { top=0.5in, bottom=0.5in } }
+, venue/isit2025      .meta:n = { venue/isit2024 }
 , venue/globecom2024  .code:n = \ExecuteKeyOptions [ieeep] {
     conference, paper=letter,
     margins = { top=0.73in, bottom=0.97in, inner=0.585in, outer=0.59in }
