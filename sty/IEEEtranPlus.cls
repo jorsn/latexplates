@@ -6,11 +6,11 @@
 \cs_new:Nn \ieeep_cinput:nnn { \exp_args:cc {#1 ExpandableDocumentCommand} {CLASSINPUT #2} {} {#3} }
 
 \keys_define:nn { ieeep } {
-, margins       .code:n = \ExecuteKeyOptions [ieeep / margins] { #1 },
-, margins/top    .code:n = { \ieeep_cinput:nnn {Provide} {toptextmargin}    {#1} }
-, margins/bottom .code:n = { \ieeep_cinput:nnn {Provide} {bottomtextmargin} {#1} }
-, margins/inner  .code:n = { \ieeep_cinput:nnn {Provide} {innersidemargin}  {#1} }
-, margins/outer  .code:n = { \ieeep_cinput:nnn {Provide} {outersidemargin}  {#1} }
+, margins        .code:n  = \ExecuteKeyOptions [ieeep / margins] { #1 },
+, margins/top    .code:n = \ieeep_cinput:nnn {Declare} {toptextmargin}    {#1}
+, margins/bottom .code:n = \ieeep_cinput:nnn {Declare} {bottomtextmargin} {#1}
+, margins/inner  .code:n = \ieeep_cinput:nnn {Declare} {innersidemargin}  {#1}
+, margins/outer  .code:n = \ieeep_cinput:nnn {Declare} {outersidemargin}  {#1}
 
 , paper      .choice:
 , paper/a4       .code:n = \ExecuteKeyOptions [ieeep] { #1 paper }
