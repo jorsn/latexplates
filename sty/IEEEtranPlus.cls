@@ -11,6 +11,7 @@
 , margins/bottom .code:n = \ieeep_cinput:nnn {Declare} {bottomtextmargin} {#1}
 , margins/inner  .code:n = \ieeep_cinput:nnn {Declare} {innersidemargin}  {#1}
 , margins/outer  .code:n = \ieeep_cinput:nnn {Declare} {outersidemargin}  {#1}
+, margins/strict .code:n = \PassOptionsToPackage {protrusion=false} {microtype}
 
 , paper      .choice:
 , paper/a4       .code:n = \ExecuteKeyOptions [ieeep] { #1 paper }
@@ -49,6 +50,11 @@
 , venue/itw2024       .code:n = \ExecuteKeyOptions [ieeep] {
     conference, paper=letter,
     margins = {top=0.735in, bottom=1.02in},
+  }
+, venue/itw2025       .code:n = \ExecuteKeyOptions [ieeep] {
+      conference, paper=a4,
+      margins = {strict, top=1.84cm, bottom=1.64cm},
+        % bottom 1.64cm, outer 1.42cm, strict
   }
 
 , conference .code:n = {
