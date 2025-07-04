@@ -21,6 +21,7 @@
     { \use:c {end #3} }
 }
 
+\let \ClistMap \clist_map_inline:nn
 
 \NewDocumentCommand{\tryWithFiles}{mom}{
   \clist_map_inline:nn {#3} {
