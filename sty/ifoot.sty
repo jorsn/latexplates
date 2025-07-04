@@ -30,15 +30,11 @@
 %   #2: footnote label defined with \ifootdef
 %   #3: argument for footnote command
 \cs_new:Nn \__ifoot_mark:Nnn
-  { \exp_args:NNf \use:nnn
-      #1
-      { \cs_if_exist:cTF { ifoot_#2_marked }
-          { [\getrefnumber{#2}] }
-          { \label{#2}
-            \cs_new:cpn { ifoot_#2_marked } {}
-          }
-      }
-      { #3 }
+  { \cs_if_exist:cTF { ifoot_#2_number }
+    { #1 [\use:c { ifoot_#2_number }] { #3 } }
+    { #1 { #3 }
+      \cs_new:cpe { ifoot_#2_number } { \thefootnote }
+    }
   }
 
 % template for commands including footnote marks
@@ -87,7 +83,7 @@
 %   #1: comma-separated list of footnote labels defined with \ifootdef
 \NewDocumentCommand {\ifootprint} {m}
   { \clist_map_inline:nn { #1 }
-      { \footnotetext [\getrefnumber{##1}] {\ifoottext{##1}} }
+    { \footnotetext [\use:c {ifoot_##1_number}] {\ifoottext{##1}} }
   }
 
 % create footnote
@@ -111,7 +107,7 @@
 
     % \footnotemark+\footnotetext is not semantically the same as \footnote
     % However, the above commented out code somehow doesn't work.
-    \ifootmark{#1}\ifootprint{#1}  
+    \ifootmark{#1}\ifootprint{#1}
   }
 
 \endinput
