@@ -51,10 +51,18 @@
     conference, paper=letter,
     margins = {top=0.735in, bottom=1.02in},
   }
-, venue/itw2025       .code:n = \ExecuteKeyOptions [ieeep] {
-      conference, paper=a4,
-      margins = {strict, top=1.84cm, bottom=1.64cm},
-        % bottom 1.64cm, outer 1.42cm, strict
+, venue/itw2026  .code:n = \ExecuteKeyOptions [ieeep] {
+    , conference
+    % for letter paper:
+    %, margins = { top=0.75in, bottom=1in, left=0.62in, right=0.62in },
+    , paper=a4
+    , margins = {
+      , strict
+      , top = 1.88cm,
+      , bottom = 1.65cm,
+      %, inner = 1.42cm,
+      %, outer = 1.42cm,
+      }
   }
 
 , conference .code:n = {
