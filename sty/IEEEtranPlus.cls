@@ -16,17 +16,22 @@
 , paper      .choice:
 , paper/a4       .code:n = \ExecuteKeyOptions [ieeep] { #1 paper }
 , paper/letter   .code:n = \ExecuteKeyOptions [ieeep] { #1 paper }
+, paper    .pass-to-packages
 
 , columns    .choices:nn =
     { one, two }
     { \str_set:NV \ieeep_columns_str {\l_keys_choice_tl column} }
 , columns     .initial:n = {two}
+, columns    .pass-to-packages
 , onecolumn      .code:n = \ExecuteKeyOptions [ieeep] { columns / one }
 , twocolumn      .code:n = \ExecuteKeyOptions [ieeep] { columns / two }
+, onecolumn    .pass-to-packages
+, twocolumn    .pass-to-packages
 
-, compress   .bool_set:N = \ieeep_compress_bool
+, compress    .bool_set:N = \ieeep_compress_bool
 , compress    .default:n = true
 , compress    .initial:n = false
+, compress    .pass-to-packages
 
 % presets
 , notecolumn     .code:n = \ExecuteKeyOptions [ieeep] { columns / one, margins = { top=3cm, bottom=3cm, inner=2cm, outer=6cm } }
